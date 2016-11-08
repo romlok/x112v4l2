@@ -5,6 +5,7 @@
 import subprocess
 
 from x112v4l2 import x11
+from x112v4l2 import ffmpeg
 
 
 if __name__ == '__main__':
@@ -12,27 +13,14 @@ if __name__ == '__main__':
 		print('Screen:', screen_id)
 		print(' Windows:')
 		for window in x11.get_windows(screen):
-			attribs = window.get_attributes()
-			geom = window.get_abs_geometry()
 			print(' ', window.id, window.get_wm_name())
-			print('  ', geom)
+			print('  ', window.get_abs_geometry())
 			# Save a screenshot of that window
-			cmd = [
-				'ffmpeg',
-				# Input options
-				'-f', 'x11grab',
-				'-s', '{}x{}'.format(geom['width'], geom['height']),
-				'-i', '{screen}+{x},{y}'.format(
-					screen=screen_id,
-					x=geom['x'],
-					y=geom['y'],
-				),
-				# Output options
-				'-vframes', '1',
-				'-y', # Overwrite without asking
-				'/tmp/snaps/{window}.png'.format(window=window.id),
-			]
-			print('  ', ' '.join(cmd))
-			proc = subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+			proc = ffmpeg.screenshot(
+				screen=screen_id,
+				geometry=window.get_abs_geometry(),
+				filename='/tmp/snaps/{win}.png'.format(win=window.id),
+			)
+			print('  ', ' '.join(proc.args))
 			
 	
