@@ -2,8 +2,6 @@
 """
 	Test script to fetch a list of castable desktops/windows
 """
-import subprocess
-
 from x112v4l2 import x11
 from x112v4l2 import ffmpeg
 
