@@ -172,3 +172,20 @@ def get_window_abs_geom(window):
 	return geom
 	
 Xlib.xobject.drawable.Window.get_abs_geometry = get_window_abs_geom
+
+
+#
+# Somewhat more high-level functions
+#
+def search_windows(title):
+	"""
+		Find and return a subset of all Window instances
+		
+		Use the `title` parameter to perform a partial (case-
+		insensitive) match against the window's title/name.
+	"""
+	for screen in get_screens().values():
+		for win in get_windows(screen):
+			if title.lower() in win.get_wm_name().lower():
+				yield win
+	
