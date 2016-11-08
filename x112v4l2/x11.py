@@ -185,8 +185,6 @@ def get_window_wm_name(window):
 		their title (eg. Chromium).
 	"""
 	ANY_TYPE = 0
-	UTF8_STRING = window.display.get_atom('UTF8_STRING')
-	COMPOUND_TEXT = window.display.get_atom('COMPOUND_TEXT')
 	
 	for prop_name in ['_NET_WM_NAME', 'WM_NAME']:
 		prop_atom = window.display.get_atom(prop_name)
@@ -194,9 +192,7 @@ def get_window_wm_name(window):
 		if not prop:
 			continue
 		
-		if prop.property_type == UTF8_STRING:
-			return prop.value.decode('utf8')
-		elif prop.property_type == COMPOUND_TEXT:
+		if isinstance(prop.value, bytes):
 			return prop.value.decode('utf8', errors='replace')
 		else:
 			return prop.value
