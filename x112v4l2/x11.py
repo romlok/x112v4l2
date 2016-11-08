@@ -76,11 +76,14 @@ def get_screens(displays=None):
 				continue
 			
 		for screen_num in range(display.screen_count()):
+			screen = display.screen(screen_num)
+			# The full screen_id is useful to have around
 			screen_id = '{disp}.{scr}'.format(
 				disp=display.get_display_name(),
 				scr=screen_num,
 			)
-			screens[screen_id] = display.screen(screen_num)
+			screen.full_id = screen_id
+			screens[screen_id] = screen
 			
 	return screens
 	
@@ -102,6 +105,10 @@ def get_windows(screen):
 		# Disregard teeny windows
 		if geom['width'] < MIN_SIZE and geom['height'] < MIN_SIZE:
 			continue
+		
+		# Additional useful info that we don't already get
+		win.screen = screen
+		
 		yield win
 		
 	
