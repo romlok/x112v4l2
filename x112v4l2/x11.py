@@ -7,6 +7,9 @@ import Xlib.display
 import Xlib.xobject.drawable
 
 
+# We ignore windows whose dimensions are both under this value
+MIN_SIZE = 64
+
 
 def get_display(name):
 	"""
@@ -89,8 +92,15 @@ def get_windows(screen):
 	"""
 	for win in get_subwindows(screen.root):
 		attribs = win.get_attributes()
+		geom = win.get_abs_geometry()
 		# Disregard any that aren't visible
 		if attribs.map_state != Xlib.X.IsViewable:
+			continue
+		# Disregard any with no title
+		if not win.get_wm_name():
+			continue
+		# Disregard teeny windows
+		if geom['width'] < MIN_SIZE and geom['height'] < MIN_SIZE:
 			continue
 		yield win
 		
