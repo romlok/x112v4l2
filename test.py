@@ -4,15 +4,11 @@
 """
 import subprocess
 import Xlib.X
-import Xlib.display
+
+from x112v4l2 import x11
 
 
-def get_screens(display):
-	"""
-		Returns an iterable of X screen IDs
-	"""
-	return range(display.screen_count())
-	
+
 def get_windows(screen):
 	"""
 		Returns an iterable of X window objects
@@ -84,12 +80,10 @@ def get_window_geom(window):
 
 
 if __name__ == '__main__':
-	display = Xlib.display.Display()
-	
-	for screen_id in get_screens(display):
+	for screen_id, screen in x11.get_screens().items():
 		print('Screen:', screen_id)
 		print(' Windows:')
-		for window in get_windows(display.screen(screen_id)):
+		for window in get_windows(screen):
 			attribs = window.get_attributes()
 			geom = get_window_geom(window)
 			print(' ', window.id, window.get_wm_name())
@@ -100,8 +94,7 @@ if __name__ == '__main__':
 				# Input options
 				'-f', 'x11grab',
 				'-s', '{}x{}'.format(geom['width'], geom['height']),
-				'-i', '{display}.{screen}+{x},{y}'.format(
-					display=display.get_display_name(),
+				'-i', '{screen}+{x},{y}'.format(
 					screen=screen_id,
 					x=geom['x'],
 					y=geom['y'],
