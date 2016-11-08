@@ -4,11 +4,11 @@
 import subprocess
 
 
-def screenshot(screen, geometry, filename):
+def screenshot(screen_id, geometry, filename):
 	"""
 		Creates a screenshot image from the X screen
 		
-		`screen` should be the full name (including display name)
+		`screen_id` should be the full name (including display name)
 		of the X11 screen to capture. Eg: ":0.0".
 		`geometry` should be a dict-like object providing values
 		for x, y, width, and height.
@@ -25,7 +25,7 @@ def screenshot(screen, geometry, filename):
 		'-f', 'x11grab',
 		'-s', '{}x{}'.format(geometry['width'], geometry['height']),
 		'-i', '{screen}+{x},{y}'.format(
-			screen=screen,
+			screen=screen_id,
 			x=geometry['x'],
 			y=geometry['y'],
 		),
@@ -36,3 +36,13 @@ def screenshot(screen, geometry, filename):
 	]
 	return subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	
+
+def capture_window(window, filename):
+	"""
+		Take a screenshot of the given X `window`
+	"""
+	return screenshot(
+		screen_id=window.screen.full_id,
+		geometry=window.get_abs_geometry(),
+		filename=filename,
+	)

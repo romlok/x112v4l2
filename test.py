@@ -15,7 +15,7 @@ if __name__ == '__main__':
 			print('  ', window.get_abs_geometry())
 			# Save a screenshot of that window
 			proc = ffmpeg.screenshot(
-				screen=screen_id,
+				screen_id=screen_id,
 				geometry=window.get_abs_geometry(),
 				filename='/tmp/snaps/{win}.png'.format(win=window.id),
 			)
