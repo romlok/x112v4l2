@@ -4,6 +4,8 @@
 import Xlib.X
 import Xlib.error
 import Xlib.display
+import Xlib.xobject.drawable
+
 
 
 def get_display(name):
@@ -79,3 +81,77 @@ def get_screens(displays=None):
 			
 	return screens
 	
+
+
+def get_windows(screen):
+	"""
+		Returns an iterable of X window objects for the given `screen`
+	"""
+	for win in get_subwindows(screen.root):
+		attribs = win.get_attributes()
+		# Disregard any that aren't visible
+		if attribs.map_state != Xlib.X.IsViewable:
+			continue
+		yield win
+		
+	
+# Functions which are monkey-patched onto the Xlib Window class
+def get_subwindows(root):
+	"""
+		Returns an iterable of all windows under the given root
+		
+		Recursively delves into the deepest recesses
+		of the window hierarchy.
+	"""
+	for win in root.query_tree().children:
+		yield win
+		for subwin in get_subwindows(win):
+			yield subwin
+	
+Xlib.xobject.drawable.Window.get_subwindows = get_subwindows
+
+def get_window_abs_pos(window):
+	"""
+		Returns a 2-tuple of a window's absolute position
+	"""
+	x = 0
+	y = 0
+	win = window
+	while win != Xlib.X.NONE:
+		geom = win.get_geometry()
+		x += geom.x
+		y += geom.y
+		win = win.query_tree().parent
+	return (x, y)
+	
+Xlib.xobject.drawable.Window.get_abs_pos = get_window_abs_pos
+
+def get_window_abs_geom(window):
+	"""
+		Returns a dict of x, y, width, height
+		
+		Additionally, ensures that the returned geometry does not
+		exceed the bounds of the window's screen/root.
+	"""
+	geom = {}
+	root = window.query_tree().root
+	# First the position
+	pos = window.get_abs_pos()
+	root_pos = root.get_abs_pos()
+	geom['x'] = max(root_pos[0], pos[0])
+	geom['y'] = max(root_pos[1], pos[1])
+	# Then the size
+	win_geom = window.get_geometry()
+	root_geom = root.get_geometry()
+	geom['width'] = min(
+		win_geom.width,
+		root_geom.width - geom['x'],
+	)
+	geom['height'] = min(
+		win_geom.height,
+		root_geom.height - geom['y'],
+	)
+	
+	return geom
+	
+Xlib.xobject.drawable.Window.get_abs_geometry = get_window_abs_geom
