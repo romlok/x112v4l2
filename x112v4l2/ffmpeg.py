@@ -1,6 +1,7 @@
 """
 	Gubbins for interfacing with ffmpeg
 """
+import math
 import subprocess
 
 
@@ -56,7 +57,7 @@ def stream(screen_id, geometry, fps, filename):
 		'ffmpeg',
 		# Need input
 		'-f', 'x11grab',
-		'-r', fps,
+		'-r', str(fps),
 		'-s', '{}x{}'.format(geometry['width'], geometry['height']),
 		'-i', '{screen}+{x},{y}'.format(
 			screen=screen_id,
@@ -67,6 +68,16 @@ def stream(screen_id, geometry, fps, filename):
 		'-vcodec', 'rawvideo',
 		'-pix_fmt', 'yuv420p',
 		'-threads', '0',
+	]
+	if geometry['width'] % 2 or geometry['height'] % 2:
+		# Output video dimensions should be multiples of 2
+		cmd += [
+			'-vf', 'pad=width={w}:height={h}'.format(
+				w=math.ceil(geometry['width'] / 2) * 2,
+				h=math.ceil(geometry['height'] / 2) * 2,
+			),
+		]
+	cmd += [
 		'-f', 'v4l2', filename
 	]
 	return subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
