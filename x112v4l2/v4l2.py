@@ -9,7 +9,7 @@ DEFAULT_LABEL = 'Virtual camera'
 
 def get_devices():
 	"""
-		Provides an iterable of v4l2 loopback devices
+		Provides an iterable of v4l2 loopback device info
 	"""
 	proc = subprocess.Popen(
 		['v4l2-ctl', '--list-devices'],
@@ -19,8 +19,11 @@ def get_devices():
 	for line in proc.stdout:
 		if not b'platform:v4l2loopback' in line:
 			continue
+		info = {}
+		info['label'] = line.decode('utf8').rsplit(' ', 1)[0]
 		next_line = proc.stdout.readline()
-		yield next_line.decode('utf8').strip()
+		info['path'] = next_line.decode('utf8').strip()
+		yield info
 		
 
 def configure_devices(labels=None):
