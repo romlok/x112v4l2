@@ -4,6 +4,9 @@
 import subprocess
 
 
+DEFAULT_LABEL = 'Virtual camera'
+
+
 def get_devices():
 	"""
 		Provides an iterable of v4l2 loopback devices
@@ -19,3 +22,52 @@ def get_devices():
 		next_line = proc.stdout.readline()
 		yield next_line.decode('utf8').strip()
 		
+
+def configure_devices(labels=None):
+	"""
+		Configures one or more v4l2 loopback devices
+		
+		Any existing configuration will be overridden.
+		
+		The `labels` parameter, if given, should be an iterable of
+		labels, one for each desired loopback device. Eg:
+			labels=['Desktop', 'Cat videos', 'Spoopycam']
+		If no labels are given, a single device will be created, with
+		some boring default label.
+		
+		Returns an iterable of the new devices
+	"""
+	# Sanity-check the labels
+	if not labels:
+		labels = [DEFAULT_LABEL]
+	if any(not isinstance(label, str) for label in labels):
+		raise TypeError('Device labels must be strings')
+	
+	# First remove the kernel module
+	proc = subprocess.Popen(
+		['modprobe', '-r', 'v4l2loopback'],
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.PIPE,
+	)
+	retcode = proc.wait()
+	if retcode:
+		raise OSError('Failed to remove v4l2loopback kernel module:\n\n{}'.format(proc.stderr))
+	
+	# Re-modprobe the kernel module, with the new params
+	proc = subprocess.Popen(
+		[
+			'modprobe',
+			'v4l2loopback',
+			'exclusive_caps=1',
+			'devices={}'.format(len(labels)),
+			'card_label={}'.format(','.join(labels)),
+		],
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.PIPE,
+	)
+	retcode = proc.wait()
+	if retcode:
+		raise OSError('Failed to add v4l2loopback kernel module:\n\n{}'.format(proc.stderr))
+	
+	return get_devices()
+	
