@@ -13,6 +13,7 @@ if __name__ == '__main__':
 		for window in x11.get_windows(screen):
 			print(' ', window.id, window.get_wm_name())
 			print('  ', window.get_abs_geometry())
+			print('  ', window.get_attributes())
 			# Save a screenshot of that window
 			proc = ffmpeg.screenshot(
 				screen_id=screen_id,
@@ -20,5 +21,4 @@ if __name__ == '__main__':
 				filename='/tmp/snaps/{win}.png'.format(win=window.id),
 			)
 			print('  ', ' '.join(proc.args))
-			
 	
