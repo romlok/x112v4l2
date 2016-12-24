@@ -2,18 +2,10 @@
 """
 	Main script for the x112v4l2 application GUI
 """
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
-GLADE_FILE = 'x112v4l2.glade'
+from x112v4l2 import ui
 
 
 if __name__ == '__main__':
-	builder = Gtk.Builder()
-	builder.add_from_file(GLADE_FILE)
-	main = builder.get_object('main')
-	main.connect("delete-event", Gtk.main_quit)
-	main.show_all()
-	Gtk.main()
+	window = ui.MainUI()
+	window.run()
 	
