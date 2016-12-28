@@ -1,6 +1,8 @@
 """
 	Functionality for handling the UI elements
 """
+import os
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -10,8 +12,8 @@ class MainUI(object):
 	"""
 		General wrapper around all the main window functionality
 	"""
-	main_glade = 'main.glade'
-	device_glade = 'device.glade'
+	main_glade = os.path.join(os.path.dirname(__file__), 'main.glade')
+	device_glade = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
