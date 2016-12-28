@@ -39,12 +39,11 @@ class MainUI(object):
 		# Finally, clean up the template/demo widgets we don't need
 		self.clear_devices()
 		
+	
 	def clear_devices(self):
 		"""
 			Removes all device configuration tabs from the main UI
 		"""
-		# AFAICT there's no built-in way to "find" a particular child
-		# so we assume we know the widget layout. Ell oh ell.
 		self.device_list.set_current_page(0)
 		for idx in range(0, self.device_list.get_n_pages() - 1):
 			self.device_list.remove_page(-1)
@@ -68,11 +67,11 @@ class MainUI(object):
 		
 		page = self.load_device_config()
 		tab_label = Gtk.Label('{}\n{}'.format(label, path))
-		## TODO: I really want to set the tab_label style to match
-		## that of the first_label, but set_style is:
-		## "Deprecated since version 3.0: Use Gtk.StyleContext instead"
-		## But I can't see any way to actually do it using StyleContext
-		#tab_label.SOMETHING(first_label.get_style_context())
+		# There's no way to completely copy widget style,
+		# and label justification can't be set through CSS,
+		# so we manually make sure the justification is consistent.
+		tab_label.set_justify(first_label.get_justify())
+		
 		self.device_list.append_page(page, tab_label)
 		
 		return page
