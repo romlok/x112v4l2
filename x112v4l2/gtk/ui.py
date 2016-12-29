@@ -2,6 +2,7 @@
 	Functionality for handling the UI elements
 """
 import os
+from concurrent import futures
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -19,6 +20,7 @@ class MainUI(object):
 	device_glade = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
 	STATE_RELOADING = 'reloading'
+	MAX_WORKERS = 2
 	
 	# Icons
 	ICON_RELOAD = 'gtk-refresh'
@@ -28,6 +30,8 @@ class MainUI(object):
 	
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
+		
+		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
 		self.load_main_window()
 		self.add_device('/dev/video666', 'Gateway to Hell')
@@ -157,21 +161,20 @@ class SignalHandler(object):
 		self.ui.show_v4l2_loaded(self.ui.STATE_RELOADING)
 		self.ui.show_v4l2_devices(self.ui.STATE_RELOADING)
 		
-		# Get t'info
-		module_available = v4l2.get_module_available()
-		if not module_available:
-			module_loaded = False
-		else:
-			module_loaded = v4l2.get_module_loaded()
+		# Async info-getting
+		avail_future = self.ui.executor.submit(v4l2.get_module_available)
+		avail_future.add_done_callback(
+			lambda f: self.ui.show_v4l2_available(f.result())
+		)
 		
-		if not module_loaded:
-			devices = []
-		else:
-			devices = v4l2.get_devices()
+		loaded_future = self.ui.executor.submit(v4l2.get_module_loaded)
+		loaded_future.add_done_callback(
+			lambda f: self.ui.show_v4l2_loaded(f.result())
+		)
 		
-		# Update the UI
-		self.ui.show_v4l2_available(module_available)
-		self.ui.show_v4l2_loaded(module_loaded)
-		self.ui.show_v4l2_devices(devices)
+		devices_future = self.ui.executor.submit(v4l2.get_devices)
+		devices_future.add_done_callback(
+			lambda f: self.ui.show_v4l2_devices(f.result())
+		)
 		
 	

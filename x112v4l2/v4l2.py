@@ -44,6 +44,7 @@ def get_devices():
 		stdout=subprocess.PIPE,
 		stderr=subprocess.DEVNULL,
 	)
+	devices = []
 	for line in proc.stdout:
 		if not b'platform:v4l2loopback' in line:
 			continue
@@ -51,8 +52,10 @@ def get_devices():
 		info['label'] = line.decode('utf8').rsplit(' ', 1)[0]
 		next_line = proc.stdout.readline()
 		info['path'] = next_line.decode('utf8').strip()
-		yield info
+		devices.append(info)
 		
+	return devices
+	
 
 def configure_devices(labels=None):
 	"""
