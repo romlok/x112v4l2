@@ -7,9 +7,37 @@ import subprocess
 DEFAULT_LABEL = 'Virtual camera'
 
 
+def get_module_available():
+	"""
+		Whether or not v4l2loopback is installed
+	"""
+	proc = subprocess.Popen(
+		['/sbin/modinfo', 'v4l2loopback', '-n'],
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.DEVNULL,
+	)
+	return not proc.wait()
+	
+def get_module_loaded():
+	"""
+		Whether or not the v4l2loopback module is in the kernel
+	"""
+	proc = subprocess.Popen(
+		['grep', 'v4l2loopback', '/proc/modules'],
+		stdout=subprocess.DEVNULL,
+		stderr=subprocess.DEVNULL,
+	)
+	return not proc.wait()
+	
+
 def get_devices():
 	"""
 		Provides an iterable of v4l2 loopback device info
+		
+		Each item is a dictionary of: {
+			'path': '/path/to/dev/video#',
+			'label': 'The user-defined label for the device',
+		}
 	"""
 	proc = subprocess.Popen(
 		['v4l2-ctl', '--list-devices'],
