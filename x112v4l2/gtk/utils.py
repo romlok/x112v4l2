@@ -1,6 +1,10 @@
 """
 	Gtk doesn't give us all the tools we need, so here's some more
 """
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
 
 def find_child_by_id(root, name):
 	"""
@@ -14,7 +18,7 @@ def find_child_by_id(root, name):
 		children = next_level
 		next_level = []
 		for child in children:
-			if child.get_name() == name:
+			if Gtk.Buildable.get_name(child) == name:
 				# Bingo
 				return child
 			if hasattr(child, 'get_children'):
