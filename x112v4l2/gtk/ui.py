@@ -18,6 +18,8 @@ class MainUI(object):
 	main_glade = os.path.join(os.path.dirname(__file__), 'main.glade')
 	device_glade = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
+	STATE_RELOADING = 'reloading'
+	
 	# Icons
 	ICON_RELOAD = 'gtk-refresh'
 	ICON_YES = 'gtk-yes'
@@ -94,6 +96,40 @@ class MainUI(object):
 		return page
 		
 	
+	def show_v4l2_available(self, state):
+		"""
+			Update indicators of v4l2 availability
+		"""
+		mod_avail_widget = self.get_widget('v4l2_module_available_indicator')
+		if state == self.STATE_RELOADING:
+			icon = self.ICON_RELOAD
+		else:
+			icon = self.ICON_YES if state else self.ICON_NO
+		mod_avail_widget.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+		
+	def show_v4l2_loaded(self, state):
+		"""
+			Update indicators of v4l2 loadedness
+		"""
+		mod_loaded_widget = self.get_widget('v4l2_module_loaded_indicator')
+		if state == self.STATE_RELOADING:
+			icon = self.ICON_RELOAD
+		else:
+			icon = self.ICON_YES if state else self.ICON_NO
+		mod_loaded_widget.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+		
+	def show_v4l2_devices(self, devices):
+		"""
+			Update indicators of v4l2 devices
+		"""
+		num_devices_widget = self.get_widget('v4l2_num_devices')
+		if devices == self.STATE_RELOADING:
+			num_devices_widget.set_label('???')
+			devices = []
+		else:
+			num_devices_widget.set_label(str(len(list(devices))))
+		
+	
 class SignalHandler(object):
 	"""
 		Handle all the signals
@@ -111,18 +147,15 @@ class SignalHandler(object):
 	def exit_application(self, widget, data):
 		return Gtk.main_quit(widget, data)
 		
+	
 	def refresh_v4l2_info(self, widget, data=None):
 		"""
 			Rechecks the state of the v4l2loopback kernel module
 		"""
-		mod_avail_widget = self.ui.get_widget('v4l2_module_available_indicator')
-		mod_loaded_widget = self.ui.get_widget('v4l2_module_loaded_indicator')
-		num_devices_widget = self.ui.get_widget('v4l2_num_devices')
-		
 		# Indicate that stuff is reloading
-		mod_avail_widget.set_from_icon_name(self.ui.ICON_RELOAD, Gtk.IconSize.BUTTON)
-		mod_loaded_widget.set_from_icon_name(self.ui.ICON_RELOAD, Gtk.IconSize.BUTTON)
-		num_devices_widget.set_label('???')
+		self.ui.show_v4l2_available(self.ui.STATE_RELOADING)
+		self.ui.show_v4l2_loaded(self.ui.STATE_RELOADING)
+		self.ui.show_v4l2_devices(self.ui.STATE_RELOADING)
 		
 		# Get t'info
 		module_available = v4l2.get_module_available()
@@ -137,9 +170,8 @@ class SignalHandler(object):
 			devices = v4l2.get_devices()
 		
 		# Update the UI
-		icons = {True: self.ui.ICON_YES, False: self.ui.ICON_NO}
-		mod_avail_widget.set_from_icon_name(icons[module_available], Gtk.IconSize.BUTTON)
-		mod_loaded_widget.set_from_icon_name(icons[module_loaded], Gtk.IconSize.BUTTON)
-		num_devices_widget.set_label(str(len(list(devices))))
+		self.ui.show_v4l2_available(module_available)
+		self.ui.show_v4l2_loaded(module_loaded)
+		self.ui.show_v4l2_devices(devices)
 		
 	
