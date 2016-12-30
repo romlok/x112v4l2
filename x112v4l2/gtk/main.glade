@@ -194,7 +194,7 @@
                         </child>
                         <child>
                           <object class="GtkButton">
-                            <property name="label" translatable="yes">Refresh devices</property>
+                            <property name="label" translatable="yes">Refresh v4l2 state</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -223,7 +223,7 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Device config</property>
+                            <property name="label" translatable="yes">Device labels</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -243,11 +243,11 @@
                             <property name="overlay_scrolling">False</property>
                             <property name="propagate_natural_width">True</property>
                             <child>
-                              <object class="GtkTextView">
+                              <object class="GtkTextView" id="v4l2_device_names">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">The list of v4l2 device names to use.
-One device name per line please.</property>
+One device name per line please. No pushing.</property>
                                 <property name="pixels_above_lines">4</property>
                                 <property name="pixels_below_lines">4</property>
                                 <property name="wrap_mode">word</property>
@@ -255,7 +255,6 @@ One device name per line please.</property>
                                 <property name="right_margin">8</property>
                                 <property name="top_margin">4</property>
                                 <property name="bottom_margin">4</property>
-                                <property name="monospace">True</property>
                               </object>
                             </child>
                           </object>
@@ -267,7 +266,7 @@ One device name per line please.</property>
                         </child>
                         <child>
                           <object class="GtkButton">
-                            <property name="label" translatable="yes">Reconfigure devices</property>
+                            <property name="label" translatable="yes">Apply device changes</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>

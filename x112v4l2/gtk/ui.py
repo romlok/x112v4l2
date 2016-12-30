@@ -126,12 +126,18 @@ class MainUI(object):
 		"""
 			Update indicators of v4l2 devices
 		"""
+		# Update the summary's total device count
 		num_devices_widget = self.get_widget('v4l2_num_devices')
 		if devices == self.STATE_RELOADING:
 			num_devices_widget.set_label('???')
 			devices = []
 		else:
 			num_devices_widget.set_label(str(len(list(devices))))
+		
+		# Populate the list of device names
+		device_names_widget = self.get_widget('v4l2_device_names')
+		buff = device_names_widget.get_buffer()
+		buff.set_text('\n'.join(dev['label'] for dev in devices))
 		
 	
 class SignalHandler(object):
