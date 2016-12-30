@@ -200,8 +200,7 @@ class SignalHandler(object):
 		names = self.ui.get_device_names()
 		devices_future = self.ui.executor.submit(v4l2.configure_devices, names)
 		devices_future.add_done_callback(
-			lambda f: self.ui.show_v4l2_devices(f.result())
+			lambda f: self.refresh_v4l2_info(f.result())
 		)
-		## TODO: Indicate that we're done
 		
 	

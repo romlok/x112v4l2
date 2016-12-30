@@ -1,6 +1,7 @@
 """
 	Gubbins for interfacing with the v4l2 side of things
 """
+import os
 import subprocess
 
 
@@ -77,22 +78,11 @@ def configure_devices(labels=None):
 	if any(not isinstance(label, str) for label in labels):
 		raise TypeError('Device labels must be strings')
 	
-	# First remove the kernel module
-	proc = subprocess.Popen(
-		['pkexec', '/sbin/modprobe', '-r', 'v4l2loopback'],
-		stdout=subprocess.DEVNULL,
-		stderr=subprocess.PIPE,
-	)
-	retcode = proc.wait()
-	if retcode:
-		raise OSError('Failed to remove v4l2loopback kernel module:\n\n{}'.format(proc.stderr.read()))
-	
-	# Re-modprobe the kernel module, with the new params
+	# Re-modprobe the kernel module with the new params
 	proc = subprocess.Popen(
 		[
 			'pkexec',
-			'/sbin/modprobe',
-			'v4l2loopback',
+			os.path.join(os.path.dirname(__file__), '..', 'v4l2-reload.sh'),
 			'exclusive_caps=1',
 			'devices={}'.format(len(labels)),
 			'card_label={}'.format(','.join(labels)),
@@ -102,7 +92,7 @@ def configure_devices(labels=None):
 	)
 	retcode = proc.wait()
 	if retcode:
-		raise OSError('Failed to add v4l2loopback kernel module:\n\n{}'.format(proc.stderr.read()))
+		raise OSError('Failed to reload v4l2loopback kernel module:\n\n{}'.format(proc.stderr.read()))
 	
 	return get_devices()
 	
