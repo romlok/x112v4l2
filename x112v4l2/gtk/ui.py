@@ -154,11 +154,11 @@ class SignalHandler(object):
 		self.ui = ui
 		
 	
-	def exit_application(self, widget, data):
-		return Gtk.main_quit(widget, data)
+	def exit_application(self, *args):
+		return Gtk.main_quit(*args)
 		
 	
-	def refresh_v4l2_info(self, widget, data=None):
+	def refresh_v4l2_info(self, *args):
 		"""
 			Rechecks the state of the v4l2loopback kernel module
 		"""
