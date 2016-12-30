@@ -80,6 +80,15 @@ class MainUI(object):
 		config = builder.get_object('device_config')
 		return config
 		
+	def get_device_names(self):
+		"""
+			Returns the list of device names from the UI
+		"""
+		device_names_widget = self.get_widget('v4l2_device_names')
+		names = device_names_widget.get_buffer().get_property('text')
+		names = [name.strip() for name in names.split('\n') if name.strip()]
+		return names
+		
 	def add_device(self, path, label):
 		"""
 			Adds a device to the main UI
@@ -182,5 +191,17 @@ class SignalHandler(object):
 		devices_future.add_done_callback(
 			lambda f: self.ui.show_v4l2_devices(f.result())
 		)
+		
+	def set_v4l2_device_info(self, *args):
+		"""
+			Applies any changes made to the v4l2 configuration
+		"""
+		## TODO: Indicate we're updating
+		names = self.ui.get_device_names()
+		devices_future = self.ui.executor.submit(v4l2.configure_devices, names)
+		devices_future.add_done_callback(
+			lambda f: self.ui.show_v4l2_devices(f.result())
+		)
+		## TODO: Indicate that we're done
 		
 	

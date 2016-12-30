@@ -271,6 +271,7 @@ One device name per line please. No pushing.</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">center</property>
+                            <signal name="clicked" handler="set_v4l2_device_info" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

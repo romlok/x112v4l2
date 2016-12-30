@@ -79,18 +79,19 @@ def configure_devices(labels=None):
 	
 	# First remove the kernel module
 	proc = subprocess.Popen(
-		['modprobe', '-r', 'v4l2loopback'],
+		['pkexec', '/sbin/modprobe', '-r', 'v4l2loopback'],
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.PIPE,
 	)
 	retcode = proc.wait()
 	if retcode:
-		raise OSError('Failed to remove v4l2loopback kernel module:\n\n{}'.format(proc.stderr))
+		raise OSError('Failed to remove v4l2loopback kernel module:\n\n{}'.format(proc.stderr.read()))
 	
 	# Re-modprobe the kernel module, with the new params
 	proc = subprocess.Popen(
 		[
-			'modprobe',
+			'pkexec',
+			'/sbin/modprobe',
 			'v4l2loopback',
 			'exclusive_caps=1',
 			'devices={}'.format(len(labels)),
@@ -101,7 +102,7 @@ def configure_devices(labels=None):
 	)
 	retcode = proc.wait()
 	if retcode:
-		raise OSError('Failed to add v4l2loopback kernel module:\n\n{}'.format(proc.stderr))
+		raise OSError('Failed to add v4l2loopback kernel module:\n\n{}'.format(proc.stderr.read()))
 	
 	return get_devices()
 	
