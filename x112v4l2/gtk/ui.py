@@ -9,6 +9,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from x112v4l2 import v4l2
+from x112v4l2 import ffmpeg
 from x112v4l2.gtk import utils
 
 
@@ -149,6 +150,29 @@ class MainUI(object):
 		buff.set_text('\n'.join(dev['label'] for dev in devices))
 		
 	
+	def show_ffmpeg_installed(self, state):
+		"""
+			Update indicators of ffmpeg installed-ness
+		"""
+		widget = self.get_widget('ffmpeg_installed_indicator')
+		if state == self.STATE_RELOADING:
+			icon = self.ICON_RELOAD
+		else:
+			icon = self.ICON_YES if state else self.ICON_NO
+		widget.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+		
+	def show_ffmpeg_version(self, version):
+		"""
+			Update indicators of ffmpeg devices
+		"""
+		# Update the version string
+		widget = self.get_widget('ffmpeg_version_indicator')
+		if version == self.STATE_RELOADING:
+			widget.set_label('???')
+		else:
+			widget.set_label(str(version))
+		
+	
 class SignalHandler(object):
 	"""
 		Handle all the signals
@@ -201,6 +225,23 @@ class SignalHandler(object):
 		devices_future = self.ui.executor.submit(v4l2.configure_devices, names)
 		devices_future.add_done_callback(
 			lambda f: self.refresh_v4l2_info(f.result())
+		)
+		
+	
+	def refresh_ffmpeg_info(self, *args):
+		"""
+			Rechecks the state of the ffmpeg binary
+		"""
+		# Indicate that stuff is reloading
+		self.ui.show_ffmpeg_installed(self.ui.STATE_RELOADING)
+		self.ui.show_ffmpeg_version(self.ui.STATE_RELOADING)
+		
+		version_future = self.ui.executor.submit(ffmpeg.get_version)
+		version_future.add_done_callback(
+			lambda f: self.ui.show_ffmpeg_installed(f.result())
+		)
+		version_future.add_done_callback(
+			lambda f: self.ui.show_ffmpeg_version(f.result())
 		)
 		
 	

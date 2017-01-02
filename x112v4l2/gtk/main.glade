@@ -140,7 +140,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -383,11 +382,10 @@ One device name per line please. No pushing.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="v4l2_num_devices1">
+                      <object class="GtkLabel" id="ffmpeg_version_indicator">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes">???</property>
                       </object>
                       <packing>
@@ -410,7 +408,7 @@ One device name per line please. No pushing.</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="v4l2_module_available_indicator2">
+                      <object class="GtkImage" id="ffmpeg_installed_indicator">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
