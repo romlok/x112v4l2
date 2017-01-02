@@ -191,6 +191,14 @@ class SignalHandler(object):
 		return Gtk.main_quit(*args)
 		
 	
+	def on_show_main(self, *args):
+		"""
+			Triggered when the main window is shown
+		"""
+		self.refresh_v4l2_info()
+		self.refresh_ffmpeg_info()
+		
+	
 	def refresh_v4l2_info(self, *args):
 		"""
 			Rechecks the state of the v4l2loopback kernel module
