@@ -5,6 +5,29 @@ import math
 import subprocess
 
 
+def get_version():
+	"""
+		Get the version of ffmpeg which is installed
+		
+		Returns None if ffmpeg is not available
+	"""
+	proc = subprocess.Popen(
+		['ffmpeg', '-version'],
+		stdout=subprocess.PIPE,
+		stderr=subprocess.DEVNULL,
+	)
+	if proc.wait():
+		return None
+	
+	# Try to parse out the version number from the first line
+	words = proc.stdout.readline().decode('utf8').split(' ')
+	if words[1] == 'version':
+		return words[2]
+	
+	# Uhh, dunno
+	return '<Unknown>'
+	
+
 def screenshot(screen_id, geometry, filename):
 	"""
 		Creates a screenshot image from the X screen
