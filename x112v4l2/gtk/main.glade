@@ -500,7 +500,7 @@ One device name per line please. No pushing.</property>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Screenshots</property>
+                            <property name="label" translatable="yes">Thumbnails</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -556,7 +556,7 @@ One device name per line please. No pushing.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="x11_shot_count_indicator">
+                              <object class="GtkLabel" id="x11_thumb_count_indicator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
@@ -582,7 +582,7 @@ One device name per line please. No pushing.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="x11_shot_path_indicator">
+                              <object class="GtkLabel" id="x11_thumb_path_indicator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
@@ -602,12 +602,12 @@ One device name per line please. No pushing.</property>
                         </child>
                         <child>
                           <object class="GtkButton">
-                            <property name="label" translatable="yes">Regenerate screenshots</property>
+                            <property name="label" translatable="yes">Regenerate thumbnails</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">center</property>
-                            <signal name="clicked" handler="regen_x11_shots" swapped="no"/>
+                            <signal name="clicked" handler="regen_x11_thumbs" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

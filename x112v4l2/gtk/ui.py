@@ -11,6 +11,7 @@ from gi.repository import Gtk
 from x112v4l2 import v4l2
 from x112v4l2 import x11
 from x112v4l2 import ffmpeg
+from x112v4l2 import thumbs
 from x112v4l2.gtk import utils
 
 
@@ -24,6 +25,7 @@ class MainUI(object):
 	STATE_RELOADING = 'reloading'
 	MAX_WORKERS = 2
 	
+	
 	# Icons
 	ICON_RELOAD = 'gtk-refresh'
 	ICON_YES = 'gtk-yes'
@@ -32,6 +34,8 @@ class MainUI(object):
 	
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
+		
+		thumbs.mkdir()
 		
 		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
@@ -181,6 +185,17 @@ class MainUI(object):
 		else:
 			widget.set_label(str(len(windows)))
 		
+	def show_x11_thumb_path(self, path):
+		widget = self.get_widget('x11_thumb_path_indicator')
+		widget.set_label(path)
+		
+	def show_x11_thumbs(self, thumbs):
+		count_widget = self.get_widget('x11_thumb_count_indicator')
+		if thumbs == self.STATE_RELOADING:
+			count_widget.set_label('???')
+		else:
+			count_widget.set_label(str(len(thumbs)))
+		
 	
 	def show_ffmpeg_installed(self, state):
 		"""
@@ -230,6 +245,7 @@ class SignalHandler(object):
 		self.refresh_v4l2_info()
 		self.refresh_ffmpeg_info()
 		self.refresh_x11_info()
+		self.regen_x11_thumbs()
 	
 	def refresh_v4l2_info(self, *args):
 		"""
@@ -284,6 +300,18 @@ class SignalHandler(object):
 		self.ui.show_x11_screen_info(screens)
 		windows = x11.get_windows()
 		self.ui.show_x11_window_info(list(windows))
+		
+	def regen_x11_thumbs(self, *args):
+		"""
+			(Re-)Generate thumbnails of all X11 windows
+		"""
+		self.ui.show_x11_thumb_path(thumbs.CACHE_PATH)
+		self.ui.show_x11_thumbs(self.ui.STATE_RELOADING)
+		
+		future = self.ui.executor.submit(thumbs.create_all)
+		future.add_done_callback(
+			lambda f: self.ui.show_x11_thumbs(f.result())
+		)
 		
 	
 	def refresh_ffmpeg_info(self, *args):
