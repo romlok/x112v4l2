@@ -88,30 +88,39 @@ def get_screens(displays=None):
 	return screens
 	
 
-
-def get_windows(screen):
+def get_windows(screens=None):
 	"""
-		Returns an iterable of X window objects for the given `screen`
+		Returns an iterable of X window objects
+		
+		If an iterable of `screens` is given, only windows of
+		those screens will be returned, otherwise the return
+		iterable will include windows from all screens.
 	"""
-	for win in get_subwindows(screen.root):
-		attribs = win.get_attributes()
-		geom = win.get_abs_geometry()
-		# Disregard any that aren't visible
-		if attribs.map_state != Xlib.X.IsViewable:
-			continue
-		# Disregard any with no title
-		if not win.get_wm_name():
-			continue
-		# Disregard teeny windows
-		if geom['width'] < MIN_SIZE and geom['height'] < MIN_SIZE:
-			continue
+	if screens is None:
+		screens = get_screens().values()
 		
-		# Additional useful info that we don't already get
-		win.screen = screen
-		
-		yield win
+	for screen in screens:
+		for win in get_subwindows(screen.root):
+			attribs = win.get_attributes()
+			geom = win.get_abs_geometry()
+			# Disregard any that aren't visible
+			if attribs.map_state != Xlib.X.IsViewable:
+				continue
+			# Disregard any with no title
+			if not win.get_wm_name():
+				continue
+			# Disregard teeny windows
+			if geom['width'] < MIN_SIZE and geom['height'] < MIN_SIZE:
+				continue
+			
+			# Additional useful info that we don't already get
+			win.screen = screen
+			
+			yield win
+			
 		
 	
+
 # Functions which are monkey-patched onto the Xlib Window class
 def get_subwindows(root):
 	"""
@@ -209,8 +218,7 @@ def search_windows(title):
 		Use the `title` parameter to perform a partial (case-
 		insensitive) match against the window's title/name.
 	"""
-	for screen in get_screens().values():
-		for win in get_windows(screen):
-			if title.lower() in win.get_wm_name().lower():
-				yield win
+	for win in get_windows():
+		if title.lower() in win.get_wm_name().lower():
+			yield win
 	
