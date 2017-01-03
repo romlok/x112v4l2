@@ -9,6 +9,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from x112v4l2 import v4l2
+from x112v4l2 import x11
 from x112v4l2 import ffmpeg
 from x112v4l2.gtk import utils
 
@@ -150,6 +151,37 @@ class MainUI(object):
 		buff.set_text('\n'.join(dev['label'] for dev in devices))
 		
 	
+	def show_x11_display_info(self, displays):
+		"""
+			Update X11 display info UI
+		"""
+		widget = self.get_widget('x11_display_count_indicator')
+		if displays == self.STATE_RELOADING:
+			widget.set_label('???')
+		else:
+			widget.set_label(str(len(displays)))
+		
+	def show_x11_screen_info(self, screens):
+		"""
+			Update X11 screen info UI
+		"""
+		widget = self.get_widget('x11_screen_count_indicator')
+		if screens == self.STATE_RELOADING:
+			widget.set_label('???')
+		else:
+			widget.set_label(str(len(screens)))
+		
+	def show_x11_window_info(self, windows):
+		"""
+			Update X11 window info UI
+		"""
+		widget = self.get_widget('x11_window_count_indicator')
+		if windows == self.STATE_RELOADING:
+			widget.set_label('???')
+		else:
+			widget.set_label(str(len(windows)))
+		
+	
 	def show_ffmpeg_installed(self, state):
 		"""
 			Update indicators of ffmpeg installed-ness
@@ -197,11 +229,11 @@ class SignalHandler(object):
 		"""
 		self.refresh_v4l2_info()
 		self.refresh_ffmpeg_info()
-		
+		self.refresh_x11_info()
 	
 	def refresh_v4l2_info(self, *args):
 		"""
-			Rechecks the state of the v4l2loopback kernel module
+			Recheck the state of the v4l2loopback kernel module
 		"""
 		# Indicate that stuff is reloading
 		self.ui.show_v4l2_available(self.ui.STATE_RELOADING)
@@ -236,9 +268,27 @@ class SignalHandler(object):
 		)
 		
 	
+	def refresh_x11_info(self, *args):
+		"""
+			Recheck the X11 situation
+		"""
+		# Indicate stuff is reloading
+		self.ui.show_x11_display_info(self.ui.STATE_RELOADING)
+		self.ui.show_x11_screen_info(self.ui.STATE_RELOADING)
+		self.ui.show_x11_window_info(self.ui.STATE_RELOADING)
+		
+		# Xlib classes aren't picklable, so we can't future this :/
+		displays = x11.get_displays()
+		self.ui.show_x11_display_info(displays)
+		screens = x11.get_screens()
+		self.ui.show_x11_screen_info(screens)
+		windows = x11.get_windows()
+		self.ui.show_x11_window_info(list(windows))
+		
+	
 	def refresh_ffmpeg_info(self, *args):
 		"""
-			Rechecks the state of the ffmpeg binary
+			Recheck the state of the ffmpeg binary
 		"""
 		# Indicate that stuff is reloading
 		self.ui.show_ffmpeg_installed(self.ui.STATE_RELOADING)
