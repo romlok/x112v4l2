@@ -71,6 +71,7 @@
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">center</property>
                             <property name="row_homogeneous">True</property>
                             <child>
                               <object class="GtkSeparator">
@@ -126,7 +127,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">Kernel module loaded</property>
                                 <property name="justify">right</property>
                               </object>
@@ -152,7 +152,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="icon_name">gtk-refresh</property>
                               </object>
                               <packing>
@@ -165,7 +164,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="icon_name">gtk-refresh</property>
                               </object>
                               <packing>
@@ -178,7 +176,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">Kernel module available</property>
                                 <property name="justify">right</property>
                               </object>
@@ -352,11 +349,14 @@ One device name per line please. No pushing.</property>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">center</property>
                             <property name="row_homogeneous">True</property>
                             <child>
                               <object class="GtkSeparator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">4</property>
+                                <property name="margin_right">4</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -367,6 +367,8 @@ One device name per line please. No pushing.</property>
                               <object class="GtkSeparator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">4</property>
+                                <property name="margin_right">4</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -378,7 +380,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">Screens</property>
                                 <property name="justify">right</property>
                               </object>
@@ -392,7 +393,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -405,7 +405,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">Displays</property>
                                 <property name="justify">right</property>
                               </object>
@@ -418,6 +417,8 @@ One device name per line please. No pushing.</property>
                               <object class="GtkSeparator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">4</property>
+                                <property name="margin_right">4</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -429,7 +430,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">Windows</property>
                                 <property name="justify">right</property>
                               </object>
@@ -443,7 +443,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -456,7 +455,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -517,11 +515,14 @@ One device name per line please. No pushing.</property>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="halign">center</property>
                             <property name="row_homogeneous">True</property>
                             <child>
                               <object class="GtkSeparator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">4</property>
+                                <property name="margin_right">4</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -532,6 +533,8 @@ One device name per line please. No pushing.</property>
                               <object class="GtkSeparator">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">4</property>
+                                <property name="margin_right">4</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -557,7 +560,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -584,7 +586,6 @@ One device name per line please. No pushing.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="hexpand">True</property>
                                 <property name="label" translatable="yes">???</property>
                               </object>
                               <packing>
@@ -675,6 +676,7 @@ One device name per line please. No pushing.</property>
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="row_homogeneous">True</property>
                     <child>
                       <object class="GtkSeparator">
@@ -705,7 +707,6 @@ One device name per line please. No pushing.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes">Version</property>
                         <property name="justify">right</property>
                       </object>
@@ -731,7 +732,6 @@ One device name per line please. No pushing.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="hexpand">True</property>
                         <property name="label" translatable="yes">Installed</property>
                         <property name="justify">right</property>
                       </object>
@@ -745,7 +745,6 @@ One device name per line please. No pushing.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
                         <property name="icon_name">gtk-refresh</property>
                       </object>
                       <packing>
