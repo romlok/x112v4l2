@@ -23,6 +23,7 @@ class MainUI(object):
 	device_glade = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
 	STATE_RELOADING = 'reloading'
+	STATE_RELOADING_LABEL = '???'
 	MAX_WORKERS = 2
 	
 	
@@ -144,7 +145,7 @@ class MainUI(object):
 		# Update the summary's total device count
 		num_devices_widget = self.get_widget('v4l2_num_devices')
 		if devices == self.STATE_RELOADING:
-			num_devices_widget.set_label('???')
+			num_devices_widget.set_label(self.STATE_RELOADING_LABEL)
 			devices = []
 		else:
 			num_devices_widget.set_label(str(len(list(devices))))
@@ -161,7 +162,7 @@ class MainUI(object):
 		"""
 		widget = self.get_widget('x11_display_count_indicator')
 		if displays == self.STATE_RELOADING:
-			widget.set_label('???')
+			widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			widget.set_label(str(len(displays)))
 		
@@ -171,7 +172,7 @@ class MainUI(object):
 		"""
 		widget = self.get_widget('x11_screen_count_indicator')
 		if screens == self.STATE_RELOADING:
-			widget.set_label('???')
+			widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			widget.set_label(str(len(screens)))
 		
@@ -181,7 +182,7 @@ class MainUI(object):
 		"""
 		widget = self.get_widget('x11_window_count_indicator')
 		if windows == self.STATE_RELOADING:
-			widget.set_label('???')
+			widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			widget.set_label(str(len(windows)))
 		
@@ -192,7 +193,7 @@ class MainUI(object):
 	def show_x11_thumbs(self, thumbs):
 		count_widget = self.get_widget('x11_thumb_count_indicator')
 		if thumbs == self.STATE_RELOADING:
-			count_widget.set_label('???')
+			count_widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			count_widget.set_label(str(len(thumbs)))
 		
@@ -215,7 +216,7 @@ class MainUI(object):
 		# Update the version string
 		widget = self.get_widget('ffmpeg_version_indicator')
 		if version == self.STATE_RELOADING:
-			widget.set_label('???')
+			widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			widget.set_label(str(version))
 		
