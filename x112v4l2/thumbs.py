@@ -43,14 +43,12 @@ def create_all(parallel=4):
 				win=window.id,
 			)
 			filename = os.path.join(CACHE_PATH, win_id + '.png')
-			print('NEW', win_id, filename)
 			procs[win_id] = ffmpeg.capture_window(window, filename)
 			thumbs[win_id] = filename
 		
 		# Check for finished processes
 		for win_id, proc in procs.copy().items():
 			if proc.poll() is not None:
-				print('DONE', win_id)
 				procs.pop(win_id)
 			
 		# Wait a bit
