@@ -10,6 +10,9 @@ import subprocess
 from x112v4l2 import x11
 from x112v4l2 import ffmpeg
 
+
+THUMB_WIDTH = 160
+THUMB_HEIGHT = 160
 CACHE_PATH = os.path.join(tempfile.gettempdir(), 'x112v4l2', 'thumbs')
 
 
@@ -43,7 +46,15 @@ def create_all(parallel=4):
 				win=window.id,
 			)
 			filename = os.path.join(CACHE_PATH, win_id + '.png')
-			procs[win_id] = ffmpeg.capture_window(window, filename)
+			procs[win_id] = ffmpeg.capture_window(
+				window=window,
+				filename=filename,
+				scale={
+					'w': THUMB_WIDTH,
+					'h': THUMB_HEIGHT,
+					'force_original_aspect_ratio': 'decrease',
+				},
+			)
 			thumbs[win_id] = filename
 		
 		# Check for finished processes
