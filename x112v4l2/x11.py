@@ -7,7 +7,7 @@ import Xlib.display
 import Xlib.xobject.drawable
 
 
-# We ignore windows whose dimensions are both under this value
+# We ignore windows with a dimension under this value
 MIN_SIZE = 64
 
 
@@ -110,7 +110,7 @@ def get_windows(screens=None):
 			if not win.get_wm_name():
 				continue
 			# Disregard teeny windows
-			if geom['width'] < MIN_SIZE and geom['height'] < MIN_SIZE:
+			if geom['width'] < MIN_SIZE or geom['height'] < MIN_SIZE:
 				continue
 			
 			# Additional useful info that we don't already get
