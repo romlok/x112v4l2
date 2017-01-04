@@ -10,7 +10,7 @@ if __name__ == '__main__':
 	for screen_id, screen in x11.get_screens().items():
 		print('Screen:', screen_id)
 		print(' Windows:')
-		for window in x11.get_windows(screen):
+		for window in x11.get_windows([screen]):
 			print(' ', window.id, window.get_wm_name())
 			print('  ', window.get_abs_geometry())
 			print('  ', window.get_attributes())
