@@ -28,7 +28,7 @@ def get_version():
 	return '<Unknown>'
 	
 
-def screenshot(screen_id, geometry, filename):
+def screenshot(screen_id, geometry, filename, scale=None):
 	"""
 		Creates a screenshot image from the X screen
 		
@@ -38,6 +38,8 @@ def screenshot(screen_id, geometry, filename):
 		for x, y, width, and height.
 		`filename` is the filesystem location where the
 		screenshot will be written.
+		If `scale` is supplied, it should be a dictionary of values
+		understood by ffmpeg's "-vf scale=..." option.
 		
 		The return value is a subprocess.Popen instance.
 		
@@ -55,6 +57,14 @@ def screenshot(screen_id, geometry, filename):
 		),
 		# Output options
 		'-vframes', '1',
+	]
+	if scale:
+		# Send the scale parameters directly to the ffmpeg command
+		# WHAT COULD POSSIBLY GO WRONG???
+		cmd += ['-vf', 'scale={}'.format(
+			':'.join('='.join(str(a) for a in item) for item in scale.items())
+		)]
+	cmd += [
 		'-y', # Overwrite without asking
 		filename,
 	]
@@ -106,7 +116,7 @@ def stream(screen_id, geometry, fps, filename):
 	return subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 	
 
-def capture_window(window, filename):
+def capture_window(window, filename, **kwargs):
 	"""
 		Take a screenshot of the given X `window`
 	"""
@@ -114,6 +124,7 @@ def capture_window(window, filename):
 		screen_id=window.screen.full_id,
 		geometry=window.get_abs_geometry(),
 		filename=filename,
+		**kwargs
 	)
 	
 def stream_window(window, fps, filename):
