@@ -18,7 +18,6 @@ class MainUI(object):
 	"""
 	# UI definition files
 	MAIN_GLADE = os.path.join(os.path.dirname(__file__), 'main.glade')
-	DEVICE_GLADE = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
 	# Random constants
 	STATE_RELOADING = 'reloading'
@@ -66,23 +65,6 @@ class MainUI(object):
 		return utils.find_child_by_id(self.main_window, name)
 		
 	
-	def clear_devices(self):
-		"""
-			Removes all device configuration tabs from the main UI
-		"""
-		self.device_list.set_current_page(0)
-		for idx in range(0, self.device_list.get_n_pages() - 1):
-			self.device_list.remove_page(-1)
-		
-	def load_device_config(self):
-		"""
-			Loads the device configuration UI from file
-		"""
-		builder = Gtk.Builder()
-		builder.add_from_file(self.DEVICE_GLADE)
-		config = builder.get_object('device_config')
-		return config
-		
 	def get_device_names(self):
 		"""
 			Returns the list of device names from the UI
@@ -92,24 +74,33 @@ class MainUI(object):
 		names = [name.strip() for name in names.split('\n') if name.strip()]
 		return names
 		
+	def clear_devices(self):
+		"""
+			Removes all device configuration tabs from the main UI
+		"""
+		self.device_list.set_current_page(0)
+		for idx in range(0, self.device_list.get_n_pages() - 1):
+			self.device_list.remove_page(-1)
+		
 	def add_device(self, path, label):
 		"""
 			Adds a device to the main UI
 		"""
+		device = DeviceUI(path=path, label=label)
+		
 		# Use the first tab's label as a template for the new one
 		first_page = self.device_list.get_nth_page(0)
 		first_label = self.device_list.get_tab_label(first_page)
 		
-		page = self.load_device_config()
 		tab_label = Gtk.Label('{}\n{}'.format(label, path))
 		# There's no way to completely copy widget style,
 		# and label justification can't be set through CSS,
 		# so we manually make sure the justification is consistent.
 		tab_label.set_justify(first_label.get_justify())
 		
-		self.device_list.append_page(page, tab_label)
+		self.device_list.append_page(device.widget, tab_label)
 		
-		return page
+		return device
 		
 	
 	def show_v4l2_available(self, state):
@@ -220,5 +211,31 @@ class MainUI(object):
 			widget.set_label(self.STATE_RELOADING_LABEL)
 		else:
 			widget.set_label(str(version))
+		
+	
+class DeviceUI(object):
+	"""
+		Wrapper around device-specific functionality
+	"""
+	DEVICE_GLADE = os.path.join(os.path.dirname(__file__), 'device.glade')
+	
+	def __init__(self, path, label, **kwargs):
+		"""
+			Create a new device UI inside the given `container`
+		"""
+		super().__init__(**kwargs)
+		self.path = path
+		self.label = label
+		self.widget = self.load_config_widget()
+		
+	
+	def load_config_widget(self):
+		"""
+			Loads the device config UI from file
+		"""
+		builder = Gtk.Builder()
+		builder.add_from_file(self.DEVICE_GLADE)
+		config = builder.get_object('device_config')
+		return config
 		
 	
