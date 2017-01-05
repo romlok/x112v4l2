@@ -41,7 +41,7 @@ class MainUI(object):
 		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
 		self.load_main_window()
-		self.add_device('/dev/video666', 'Gateway to Hell')
+		
 		
 	def run(self):
 		self.main_window.show_all()
@@ -154,6 +154,11 @@ class MainUI(object):
 		device_names_widget = self.get_widget('v4l2_device_names')
 		buff = device_names_widget.get_buffer()
 		buff.set_text('\n'.join(dev['label'] for dev in devices))
+		
+		# Re/populate the device tabs
+		self.clear_devices()
+		for device in devices:
+			self.add_device(path=device['path'], label=device['label'])
 		
 	
 	def show_x11_display_info(self, displays):
