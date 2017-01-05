@@ -19,13 +19,14 @@ class MainUI(object):
 	"""
 		General wrapper around all the main window functionality
 	"""
-	main_glade = os.path.join(os.path.dirname(__file__), 'main.glade')
-	device_glade = os.path.join(os.path.dirname(__file__), 'device.glade')
+	# UI definition files
+	MAIN_GLADE = os.path.join(os.path.dirname(__file__), 'main.glade')
+	DEVICE_GLADE = os.path.join(os.path.dirname(__file__), 'device.glade')
 	
+	# Random constants
 	STATE_RELOADING = 'reloading'
 	STATE_RELOADING_LABEL = '???'
 	MAX_WORKERS = 2
-	
 	
 	# Icons
 	ICON_RELOAD = 'gtk-refresh'
@@ -52,7 +53,7 @@ class MainUI(object):
 			Loads the main window UI from file
 		"""
 		builder = Gtk.Builder()
-		builder.add_from_file(self.main_glade)
+		builder.add_from_file(self.MAIN_GLADE)
 		builder.connect_signals(SignalHandler(ui=self))
 		# We want the main window
 		self.main_window = builder.get_object('main')
@@ -83,7 +84,7 @@ class MainUI(object):
 			Loads the device configuration UI from file
 		"""
 		builder = Gtk.Builder()
-		builder.add_from_file(self.device_glade)
+		builder.add_from_file(self.DEVICE_GLADE)
 		config = builder.get_object('device_config')
 		return config
 		
