@@ -5,7 +5,6 @@ import os
 import time
 import tempfile
 import shutil
-import subprocess
 
 from x112v4l2 import x11
 from x112v4l2 import ffmpeg

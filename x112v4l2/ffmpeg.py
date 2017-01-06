@@ -47,6 +47,7 @@ def screenshot(screen_id, geometry, filename, scale=None):
 	"""
 	cmd = [
 		'ffmpeg',
+		'-loglevel', 'error',
 		# Input options
 		'-f', 'x11grab',
 		'-s', '{}x{}'.format(geometry['width'], geometry['height']),
@@ -68,7 +69,11 @@ def screenshot(screen_id, geometry, filename, scale=None):
 		'-y', # Overwrite without asking
 		filename,
 	]
-	return subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	return subprocess.Popen(
+		cmd,
+		stdin=subprocess.DEVNULL,
+		stdout=subprocess.DEVNULL,
+	)
 	
 def stream(screen_id, geometry, fps, filename):
 	"""
@@ -88,6 +93,7 @@ def stream(screen_id, geometry, fps, filename):
 	"""
 	cmd = [
 		'ffmpeg',
+		'-loglevel', 'error',
 		# Need input
 		'-f', 'x11grab',
 		'-r', str(fps),
@@ -113,7 +119,11 @@ def stream(screen_id, geometry, fps, filename):
 	cmd += [
 		'-f', 'v4l2', filename
 	]
-	return subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+	return subprocess.Popen(
+		cmd,
+		stdin=subprocess.DEVNULL,
+		stdout=subprocess.DEVNULL,
+	)
 	
 
 def capture_window(window, filename, **kwargs):
