@@ -29,7 +29,7 @@ class MainHandler(object):
 		
 	
 	def exit_application(self, *args):
-		return Gtk.main_quit(*args)
+		self.ui.stop()
 		
 	
 	def on_show_main(self, *args):

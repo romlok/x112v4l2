@@ -42,6 +42,11 @@ class MainUI(object):
 		self.main_window.show_all()
 		Gtk.main()
 		
+	def stop(self):
+		self.executor.shutdown(wait=True)
+		return Gtk.main_quit()
+		
+		
 	def load_main_window(self):
 		"""
 			Loads the main window UI from file
