@@ -8,6 +8,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from x112v4l2 import thumbs
 from x112v4l2.gtk import signals
 from x112v4l2.gtk import utils
 
@@ -33,8 +34,10 @@ class MainUI(object):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 		
-		# Where we keep the current DeviceUI instances
+		# The current DeviceUI instances
 		self.deviceuis = []
+		# The most recent X11 window information
+		self.x11_windows = []
 		
 		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
@@ -68,7 +71,7 @@ class MainUI(object):
 	
 	def get_widget(self, name):
 		"""
-			Return the `name`d widget, or none
+			Return the `name`d widget, or None
 		"""
 		return utils.find_child_by_id(self.main_window, name)
 		
@@ -188,6 +191,8 @@ class MainUI(object):
 		else:
 			widget.set_label(str(len(windows)))
 		
+		self.x11_windows = windows
+		
 	def show_x11_thumb_path(self, path):
 		widget = self.get_widget('x11_thumb_path_indicator')
 		widget.set_label(path)
@@ -195,9 +200,17 @@ class MainUI(object):
 	def show_x11_thumbs(self, thumbs):
 		count_widget = self.get_widget('x11_thumb_count_indicator')
 		if thumbs == self.STATE_RELOADING:
+			# Clear all the things
 			count_widget.set_label(self.STATE_RELOADING_LABEL)
-		else:
-			count_widget.set_label(str(len(thumbs)))
+			for device in self.deviceuis:
+				device.clear_thumbs()
+			return
+			
+		# We're doing it live!
+		count_widget.set_label(str(len(thumbs)))
+		
+		for device in self.deviceuis:
+			device.show_thumbs(self.x11_windows)
 		
 	
 	def show_ffmpeg_installed(self, state):
@@ -228,6 +241,8 @@ class DeviceUI(object):
 		Wrapper around device-specific functionality
 	"""
 	DEVICE_GLADE = os.path.join(os.path.dirname(__file__), 'device.glade')
+	THUMB_GLADE = os.path.join(os.path.dirname(__file__), 'device-thumb.glade')
+	
 	
 	def __init__(self, path, label, **kwargs):
 		"""
@@ -237,6 +252,7 @@ class DeviceUI(object):
 		self.path = path
 		self.label = label
 		self.widget = self.load_config_widget()
+		self.clear_thumbs()
 		
 	
 	def load_config_widget(self):
@@ -247,5 +263,56 @@ class DeviceUI(object):
 		builder.add_from_file(self.DEVICE_GLADE)
 		config = builder.get_object('device_config')
 		return config
+		
+	def load_thumb_widget(self):
+		"""
+			Loads the thumb_list item widget
+		"""
+		builder = Gtk.Builder()
+		builder.add_from_file(self.THUMB_GLADE)
+		widget = builder.get_object('thumb')
+		return widget
+		
+	
+	def get_widget(self, name):
+		"""
+			Return the `name`d widget, or None
+		"""
+		return utils.find_child_by_id(self.widget, name)
+		
+	
+	def clear_thumbs(self):
+		"""
+			Remove all thumbnails from the list
+		"""
+		thumb_list = self.get_widget('thumb_list')
+		for row in thumb_list.get_children():
+			thumb_list.remove(row)
+		
+	def show_thumbs(self, windows):
+		"""
+			Show/update the list of window thumbnails
+		"""
+		for win in windows:
+			self.add_thumb(
+				label=win.get_wm_name(),
+				image=os.path.join(thumbs.CACHE_PATH, thumbs.get_win_filename(win)),
+			)
+		
+	def add_thumb(self, label, image):
+		"""
+			Add a single thumbnail to the list of window thumbnails
+		"""
+		thumb_list = self.get_widget('thumb_list')
+		thumb = self.load_thumb_widget()
+		# The label part
+		label_widget = utils.find_child_by_id(thumb, 'label')
+		label_widget.set_text(label)
+		# The image part
+		image_widget = utils.find_child_by_id(thumb, 'image')
+		image_widget.set_from_file(image)
+		# Finally, add it to the list
+		thumb_list.add(thumb)
+		return thumb
 		
 	
