@@ -33,6 +33,9 @@ class MainUI(object):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 		
+		# Where we keep the current DeviceUI instances
+		self.deviceuis = []
+		
 		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
 		self.load_main_window()
@@ -83,6 +86,7 @@ class MainUI(object):
 		"""
 			Removes all device configuration tabs from the main UI
 		"""
+		self.deviceuis = []
 		self.device_list.set_current_page(0)
 		for idx in range(0, self.device_list.get_n_pages() - 1):
 			self.device_list.remove_page(-1)
@@ -105,6 +109,7 @@ class MainUI(object):
 		
 		self.device_list.append_page(device.widget, tab_label)
 		
+		self.deviceuis.append(device)
 		return device
 		
 	
