@@ -24,6 +24,15 @@ def rmdir():
 	return shutil.rmtree(CACHE_PATH)
 	
 
+def get_win_filename(window):
+	"""
+		Return the base filename to be used for the given `window`
+	"""
+	return '{scr}.{win}.png'.format(
+		scr=window.screen['full_id'],
+		win=window.id,
+	)
+
 def create_all(parallel=4):
 	"""
 		Create thumbnails for all (interesting) X11 windows
@@ -40,11 +49,8 @@ def create_all(parallel=4):
 		while windows and len(procs) < parallel:
 			# Start a new process
 			window = windows.pop()
-			win_id = '{scr}.{win}'.format(
-				scr=window.screen['full_id'],
-				win=window.id,
-			)
-			filename = os.path.join(CACHE_PATH, win_id + '.png')
+			win_id = get_win_filename(window)
+			filename = os.path.join(CACHE_PATH, win_id)
 			procs[win_id] = ffmpeg.capture_window(
 				window=window,
 				filename=filename,
