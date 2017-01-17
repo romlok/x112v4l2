@@ -98,7 +98,11 @@ class MainUI(object):
 		"""
 			Adds a device to the main UI
 		"""
-		device = DeviceUI(path=path, label=label)
+		device = DeviceUI(
+			path=path,
+			label=label,
+			windows=self.x11_windows,
+		)
 		
 		# Use the first tab's label as a template for the new one
 		first_page = self.device_list.get_nth_page(0)
@@ -244,15 +248,19 @@ class DeviceUI(object):
 	THUMB_GLADE = os.path.join(os.path.dirname(__file__), 'device-thumb.glade')
 	
 	
-	def __init__(self, path, label, **kwargs):
+	def __init__(self, path, label, windows=None, **kwargs):
 		"""
 			Create a new device UI inside the given `container`
+			
+			If `windows` is supplied, the thumb list will be populated.
 		"""
 		super().__init__(**kwargs)
 		self.path = path
 		self.label = label
 		self.widget = self.load_config_widget()
 		self.clear_thumbs()
+		if windows:
+			self.show_thumbs(windows=windows)
 		
 	
 	def load_config_widget(self):
@@ -294,10 +302,13 @@ class DeviceUI(object):
 			Show/update the list of window thumbnails
 		"""
 		for win in windows:
-			self.add_thumb(
+			thumb = self.add_thumb(
 				label=win.get_wm_name(),
 				image=os.path.join(thumbs.CACHE_PATH, thumbs.get_win_filename(win)),
 			)
+			# Associate the thumb with the window, for later reference
+			thumb.source_window = win
+			
 		
 	def add_thumb(self, label, image):
 		"""
