@@ -13,18 +13,26 @@ from x112v4l2 import ffmpeg
 from x112v4l2 import thumbs
 
 
-class MainHandler(object):
+class BaseHandler(object):
 	"""
-		Handle all the signals
+		Base class for common handler-object functionality
 	"""
 	def __init__(self, ui, **kwargs):
 		"""
-			Create a new SignalHandler
+			Create a new signal handler
 			
-			The `ui` parameter should be an instance of a MainUI class.
+			The `ui` parameter should be an instance of a UI class
 		"""
-		super().__init__(**kwargs)
 		self.ui = ui
+		super().__init__(**kwargs)
+		
+	
+class MainHandler(BaseHandler):
+	"""
+		Handle all the signals
+	"""
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
 		
 		thumbs.mkdir()
 		
@@ -138,5 +146,28 @@ class MainHandler(object):
 		version_future.add_done_callback(
 			self.future_callback(self.ui.show_ffmpeg_version)
 		)
+		
+	
+
+class DeviceHandler(BaseHandler):
+	"""
+		Handler for events triggered from a device tab
+	"""
+	def update_source_config(self, list_box, item, *args):
+		"""
+			Update the source config based on thumbnail selection
+		"""
+		# Find the source window instance
+		source_window = getattr(item, 'source_window', None)
+		if not source_window:
+			for child in item.get_children():
+				source_window = getattr(child, 'source_window', None)
+				if source_window is not None:
+					break
+		
+		if not source_window:
+			raise TypeError('No source window found on object: {!r}'.format(item))
+		
+		self.ui.set_source_window(source_window)
 		
 	

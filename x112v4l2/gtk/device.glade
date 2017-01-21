@@ -56,6 +56,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                       <object class="GtkListBox" id="thumb_list">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="row-selected" handler="update_source_config" swapped="no"/>
                         <child>
                           <object class="GtkListBoxRow">
                             <property name="width_request">100</property>
@@ -418,12 +419,6 @@ This is a line of text which has more than 80 characters, so that we can test wh
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                     </child>

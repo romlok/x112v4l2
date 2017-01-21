@@ -269,6 +269,7 @@ class DeviceUI(object):
 		"""
 		builder = Gtk.Builder()
 		builder.add_from_file(self.DEVICE_GLADE)
+		builder.connect_signals(signals.DeviceHandler(ui=self))
 		config = builder.get_object('device_config')
 		return config
 		
@@ -325,5 +326,16 @@ class DeviceUI(object):
 		# Finally, add it to the list
 		thumb_list.add(thumb)
 		return thumb
+		
+	
+	def set_source_window(self, window):
+		"""
+			Set the source details from the given `window`
+		"""
+		geom = window.get_abs_geometry()
+		self.get_widget('source_x').set_text(str(geom['x']))
+		self.get_widget('source_y').set_text(str(geom['y']))
+		self.get_widget('source_width').set_text(str(geom['width']))
+		self.get_widget('source_height').set_text(str(geom['height']))
 		
 	
