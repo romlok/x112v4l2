@@ -157,6 +157,9 @@ class DeviceHandler(BaseHandler):
 		"""
 			Update the source config based on thumbnail selection
 		"""
+		if item is None:
+			return
+		
 		# Find the source window instance
 		source_window = getattr(item, 'source_window', None)
 		if not source_window:
