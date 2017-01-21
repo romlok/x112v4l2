@@ -61,8 +61,11 @@ class MainHandler(BaseHandler):
 		"""
 		self.refresh_v4l2_info()
 		self.refresh_ffmpeg_info()
-		self.refresh_x11_info()
-		self.regen_x11_thumbs()
+		# We want to do the X11 bit once we're all finished,
+		# so that our own window gets included in the info
+		GObject.idle_add(self.refresh_x11_info)
+		GObject.idle_add(self.regen_x11_thumbs)
+		
 	
 	def refresh_v4l2_info(self, *args):
 		"""
