@@ -302,6 +302,7 @@ class DeviceUI(object):
 		"""
 			Show/update the list of window thumbnails
 		"""
+		self.clear_thumbs()
 		for win in windows:
 			thumb = self.add_thumb(
 				label=win.get_wm_name(),
