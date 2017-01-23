@@ -360,7 +360,7 @@ class DeviceUI(object):
 			height = geom['height']
 		else:
 			# Check what's going on in the UI
-			from_source_widget = self.get_widget('output_use_source_res')
+			from_source_widget = self.get_widget('output_use_source_size')
 			if from_source_widget.get_active():
 				width = self.get_widget('source_width').get_text()
 				height = self.get_widget('source_height').get_text()
