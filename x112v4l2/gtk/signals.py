@@ -175,5 +175,15 @@ class DeviceHandler(BaseHandler):
 			raise TypeError('No source window found on object: {!r}'.format(item))
 		
 		self.ui.set_source_window(source_window)
+		self.refresh_output_config()
+		
+	
+	def refresh_output_config(self, *args):
+		"""
+			Update the state of the output config controls
+		"""
+		self.ui.update_output_size()
+		self.ui.update_output_state()
+		self.ui.update_output_command()
 		
 	

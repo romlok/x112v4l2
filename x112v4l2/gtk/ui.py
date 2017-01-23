@@ -340,3 +340,43 @@ class DeviceUI(object):
 		self.get_widget('source_height').set_text(str(geom['height']))
 		
 	
+	def update_output_size(self, geom=None, width=None, height=None):
+		"""
+			Update output resolution
+			
+			Explicit `width` and `height` parameters can be given,
+			after which will be checked any given `geom` dictionary.
+			If none of these arguments are supplied, the values will
+			be determined from the UI widgets as appropriate.
+		"""
+		width_widget = self.get_widget('output_width')
+		height_widget = self.get_widget('output_height')
+		
+		# Work out what values of width and height to use
+		if width is not None and height is not None:
+			pass
+		elif geom is not None:
+			width = geom['width']
+			height = geom['height']
+		else:
+			# Check what's going on in the UI
+			from_source_widget = self.get_widget('output_use_source_res')
+			if from_source_widget.get_active():
+				width = self.get_widget('source_width').get_text()
+				height = self.get_widget('source_height').get_text()
+			else:
+				# Just keep whatever's in the current widgets
+				width = width_widget.get_text()
+				height = height_widget.get_text()
+			width = int(width) if width.isdigit() else 0
+			height = int(height) if height.isdigit() else 0
+		
+		# Now we can update the widgets
+		width_widget.set_text(str(width))
+		height_widget.set_text(str(height))
+		
+	def update_output_command(self):
+		pass
+	def update_output_state(self):
+		pass
+	
