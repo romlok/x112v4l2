@@ -334,6 +334,7 @@ class DeviceUI(object):
 			Set the source details from the given `window`
 		"""
 		geom = window.get_abs_geometry()
+		self.get_widget('source_screen').set_text(str(window.screen.full_id))
 		self.get_widget('source_x').set_text(str(geom['x']))
 		self.get_widget('source_y').set_text(str(geom['y']))
 		self.get_widget('source_width').set_text(str(geom['width']))
