@@ -9,6 +9,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from x112v4l2 import thumbs
+from x112v4l2 import ffmpeg
 from x112v4l2.gtk import signals
 from x112v4l2.gtk import utils
 
@@ -377,7 +378,27 @@ class DeviceUI(object):
 		height_widget.set_text(str(height))
 		
 	def update_output_command(self):
-		pass
+		"""
+			Update the display of the ffmpeg command to use
+		"""
+		# We fetch values directly from what the UI displays,
+		# so that the source of all values are visible to the user.
+		try:
+			cmd = ffmpeg.compile_command(
+				source_screen=self.get_widget('source_screen').get_text(),
+				source_x=self.get_widget('source_x').get_text(),
+				source_y=self.get_widget('source_y').get_text(),
+				source_width=self.get_widget('source_width').get_text(),
+				source_height=self.get_widget('source_height').get_text(),
+				output_filename=self.path,
+				output_width=self.get_widget('output_width').get_text(),
+				output_height=self.get_widget('output_height').get_text(),
+				fps=20,
+			)
+		except ValueError:
+			cmd = []
+		self.get_widget('process_command').set_text(' '.join(cmd))
+		
 	def update_output_state(self):
 		pass
 	
