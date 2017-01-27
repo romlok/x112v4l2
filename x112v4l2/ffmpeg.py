@@ -28,6 +28,103 @@ def get_version():
 	return '<Unknown>'
 	
 
+def compile_command(
+	source_screen, source_x, source_y, source_width, source_height,
+	output_filename,
+	output_width=None,
+	output_height=None,
+	fps=0,
+	scale=True,
+	pad=True,
+):
+	"""
+		Build an ffmpeg command suitable for the given arguments
+		
+		The return value is an iterable of command tokens, suitable
+		for passing to subprocess.Popen().
+		
+		The `source_screen` should be either an X11 Screen instance,
+		or the string full ID of a screen, eg. ":0.0".
+		
+		To take a single screenshot of the given source, provide an
+		`fps` of 0.
+		
+		The source will be scaled to fit the output dimensions by
+		default. If this is not desired, set the `scale` parameter
+		to False.
+		
+		By default, pillar/letterbox padding is added to the scaled
+		input. Set the `pad` parameter to False to disable this,
+		and output an image/video using the source aspect ratio.
+	"""
+	# Validation/defaulting
+	if not output_width:
+		output_width = source_width
+	if not output_height:
+		output_height = source_height
+	
+	input_args = [
+		'ffmpeg',
+		'-loglevel', 'error',
+		# Input options
+		'-f', 'x11grab',
+		# NB. High framerate for screenshots, so we're not left waiting
+		'-framerate', str(fps if fps else 120),
+		'-s', '{w}x{h}'.format(w=source_width, h=source_height),
+		'-i', '{screen}+{x},{y}'.format(
+			screen=getattr(source_screen, 'full_id', source_screen),
+			x=source_x,
+			y=source_y,
+		),
+	]
+	
+	# Filters (eg. scaling, letterboxing, etc.)
+	filter_args = []
+	if output_width != source_width or output_height != source_height:
+		source_aspect = source_width / source_height
+		output_aspect = output_width / output_height
+		if scale and output_width != source_width and output_height != source_height:
+			# Scale the video
+			filter_args.append(
+				'scale=width={w}:height={h}:force_original_aspect_ratio=decrease'.format(
+					w=output_width,
+					h=output_height,
+				)
+			)
+		if pad and source_aspect != output_aspect:
+			# Apply letterboxing
+			filter_args.append(
+				'pad=width={w}:height={h}:x=(ow-iw)/2:y=(oh-ih)/2'.format(
+					w=output_width,
+					h=output_height,
+				)
+			)
+		
+	if filter_args:
+		filter_args = ['-vf', ', '.join(filter_args)]
+	
+	# Output
+	output_args = []
+	if not fps:
+		# One-time screenshot
+		output_args += [
+			'-vframes', '1',
+			'-y',
+			output_filename,
+		]
+	else:
+		# Persistent stream
+		output_args += [
+			'-vcodec', 'rawvideo',
+			'-pix_fmt', 'yuv420p',
+			'-threads', '0',
+			'-f', 'v4l2',
+			output_filename,
+		]
+	
+	return input_args + filter_args + output_args
+	
+
 def screenshot(screen_id, geometry, filename, scale=None):
 	"""
 		Creates a screenshot image from the X screen
@@ -45,30 +142,18 @@ def screenshot(screen_id, geometry, filename, scale=None):
 		
 		NB. All output of the ffmpeg process is devnull'ed.
 	"""
-	cmd = [
-		'ffmpeg',
-		'-loglevel', 'error',
-		# Input options
-		'-f', 'x11grab',
-		'-s', '{}x{}'.format(geometry['width'], geometry['height']),
-		'-i', '{screen}+{x},{y}'.format(
-			screen=screen_id,
-			x=geometry['x'],
-			y=geometry['y'],
-		),
-		# Output options
-		'-vframes', '1',
-	]
-	if scale:
-		# Send the scale parameters directly to the ffmpeg command
-		# WHAT COULD POSSIBLY GO WRONG???
-		cmd += ['-vf', 'scale={}'.format(
-			':'.join('='.join(str(a) for a in item) for item in scale.items())
-		)]
-	cmd += [
-		'-y', # Overwrite without asking
-		filename,
-	]
+	cmd = compile_command(
+		source_screen=screen_id,
+		source_x=geometry['x'],
+		source_y=geometry['y'],
+		source_width=geometry['width'],
+		source_height=geometry['height'],
+		output_filename=filename,
+		output_width=scale['w'] if scale else None,
+		output_height=scale['h'] if scale else None,
+		fps=0,
+		pad=False,
+	)
 	return subprocess.Popen(
 		cmd,
 		stdin=subprocess.DEVNULL,
@@ -91,34 +176,19 @@ def stream(screen_id, geometry, fps, filename):
 		
 		NB. All output of the ffmpeg process is devnull'ed.
 	"""
-	cmd = [
-		'ffmpeg',
-		'-loglevel', 'error',
-		# Need input
-		'-f', 'x11grab',
-		'-r', str(fps),
-		'-s', '{}x{}'.format(geometry['width'], geometry['height']),
-		'-i', '{screen}+{x},{y}'.format(
-			screen=screen_id,
-			x=geometry['x'],
-			y=geometry['y'],
-		),
-		# Output control
-		'-vcodec', 'rawvideo',
-		'-pix_fmt', 'yuv420p',
-		'-threads', '0',
-	]
-	if geometry['width'] % 2 or geometry['height'] % 2:
+	cmd = compile_command(
+		source_screen=screen_id,
+		source_x=geometry['x'],
+		source_y=geometry['y'],
+		source_width=geometry['width'],
+		source_height=geometry['height'],
+		output_filename=filename,
 		# Output video dimensions should be multiples of 2
-		cmd += [
-			'-vf', 'pad=width={w}:height={h}'.format(
-				w=math.ceil(geometry['width'] / 2) * 2,
-				h=math.ceil(geometry['height'] / 2) * 2,
-			),
-		]
-	cmd += [
-		'-f', 'v4l2', filename
-	]
+		output_width=math.ceil(geometry['width'] / 2) * 2,
+		output_height=math.ceil(geometry['height'] / 2) * 2,
+		fps=fps,
+		scale=False,
+	)
 	return subprocess.Popen(
 		cmd,
 		stdin=subprocess.DEVNULL,
