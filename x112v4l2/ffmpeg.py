@@ -62,6 +62,12 @@ def compile_command(
 		output_width = source_width
 	if not output_height:
 		output_height = source_height
+	source_x = int(source_x)
+	source_y = int(source_y)
+	source_width = int(source_width)
+	source_height = int(source_height)
+	output_width = int(output_width)
+	output_height = int(output_height)
 	
 	input_args = [
 		'ffmpeg',
