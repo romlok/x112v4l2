@@ -11,16 +11,20 @@ The next (non-blank) line is 80 characters long
 
 This is a line of text which has more than 80 characters, so that we can test what happens when things get looooong.</property>
   </object>
-  <object class="GtkBox" id="device_config">
+  <object class="GtkPaned" id="device_config">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">4</property>
-    <property name="spacing">4</property>
-    <signal name="parent-set" handler="refresh_output_config" swapped="no"/>
+    <property name="can_focus">True</property>
+    <property name="position">500</property>
+    <property name="wide_handle">True</property>
     <child>
       <object class="GtkBox">
+        <property name="width_request">480</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
@@ -306,30 +310,18 @@ This is a line of text which has more than 80 characters, so that we can test wh
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSeparator">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">4</property>
-        <property name="margin_right">4</property>
-        <property name="hexpand">False</property>
-        <property name="orientation">vertical</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="resize">False</property>
+        <property name="shrink">False</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">4</property>
+        <property name="margin_right">4</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">4</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
@@ -750,9 +742,8 @@ This is a line of text which has more than 80 characters, so that we can test wh
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="resize">True</property>
+        <property name="shrink">False</property>
       </packing>
     </child>
   </object>

@@ -3,8 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkApplicationWindow" id="main">
-    <property name="width_request">800</property>
-    <property name="height_request">600</property>
+    <property name="width_request">1000</property>
     <property name="can_focus">False</property>
     <property name="show_menubar">False</property>
     <signal name="delete-event" handler="exit_application" swapped="no"/>
@@ -18,6 +17,9 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="margin_right">4</property>
+            <property name="margin_bottom">8</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox">
