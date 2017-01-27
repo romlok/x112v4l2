@@ -393,7 +393,7 @@ class DeviceUI(object):
 				output_filename=self.path,
 				output_width=self.get_widget('output_width').get_text(),
 				output_height=self.get_widget('output_height').get_text(),
-				fps=20,
+				fps=self.get_widget('output_fps').get_text(),
 			)
 		except ValueError:
 			cmd = []

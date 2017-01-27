@@ -68,6 +68,7 @@ def compile_command(
 	source_height = int(source_height)
 	output_width = int(output_width)
 	output_height = int(output_height)
+	fps = int(fps)
 	
 	input_args = [
 		'ffmpeg',
