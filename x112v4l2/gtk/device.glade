@@ -169,6 +169,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">width</property>
                     <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -195,6 +196,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">height</property>
                     <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -210,6 +212,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">y</property>
                     <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -236,6 +239,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">x</property>
                     <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -273,6 +277,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">:0.0</property>
                     <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -368,6 +373,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="active">True</property>
+                            <signal name="state-set" handler="refresh_output_config" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -401,6 +407,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                 <property name="xalign">1</property>
                                 <property name="placeholder_text" translatable="yes">width</property>
                                 <property name="input_purpose">number</property>
+                                <signal name="changed" handler="refresh_output_config" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -429,6 +436,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                 <property name="xalign">1</property>
                                 <property name="placeholder_text" translatable="yes">height</property>
                                 <property name="input_purpose">number</property>
+                                <signal name="changed" handler="refresh_output_config" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -477,6 +485,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                             <property name="xalign">1</property>
                             <property name="placeholder_text" translatable="yes">FPS</property>
                             <property name="input_purpose">number</property>
+                            <signal name="changed" handler="refresh_output_config" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
