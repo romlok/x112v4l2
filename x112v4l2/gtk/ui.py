@@ -7,6 +7,7 @@ from concurrent import futures
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from x112v4l2 import thumbs
 from x112v4l2 import ffmpeg
@@ -41,6 +42,20 @@ class BaseUI(object):
 		self.executor = executor
 		
 		super().__init__(**kwargs)
+		
+	
+	def future_callback(self, func, *args, **kwargs):
+		"""
+			Return a function which can be used as a future callback
+			
+			At the time of the callback, the `future.result()` is sent
+			to the function as the first argument, followed by any
+			additional arguments specified here.
+		"""
+		def callback(future):
+			return GObject.idle_add(func, future.result(), *args, **kwargs)
+			
+		return callback
 		
 	
 class MainUI(BaseUI):

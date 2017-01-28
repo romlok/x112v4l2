@@ -41,20 +41,6 @@ class MainHandler(BaseHandler):
 		self.ui.stop()
 		
 	
-	def future_callback(self, func, *args, **kwargs):
-		"""
-			Return a function which can be used as a future callback
-			
-			At the time of the callback, the `future.result()` is sent
-			to the function as the first argument, followed by any
-			additional arguments specified here.
-		"""
-		def callback(future):
-			return GObject.idle_add(func, future.result(), *args, **kwargs)
-			
-		return callback
-		
-	
 	def on_show_main(self, *args):
 		"""
 			Triggered when the main window is shown
@@ -79,17 +65,17 @@ class MainHandler(BaseHandler):
 		# Async info-getting
 		avail_future = self.ui.executor.submit(v4l2.get_module_available)
 		avail_future.add_done_callback(
-			self.future_callback(self.ui.show_v4l2_available)
+			self.ui.future_callback(self.ui.show_v4l2_available)
 		)
 		
 		loaded_future = self.ui.executor.submit(v4l2.get_module_loaded)
 		loaded_future.add_done_callback(
-			self.future_callback(self.ui.show_v4l2_loaded)
+			self.ui.future_callback(self.ui.show_v4l2_loaded)
 		)
 		
 		devices_future = self.ui.executor.submit(v4l2.get_devices)
 		devices_future.add_done_callback(
-			self.future_callback(self.ui.show_v4l2_devices)
+			self.ui.future_callback(self.ui.show_v4l2_devices)
 		)
 		
 	def set_v4l2_device_info(self, *args):
@@ -100,7 +86,7 @@ class MainHandler(BaseHandler):
 		names = self.ui.get_device_names()
 		devices_future = self.ui.executor.submit(v4l2.configure_devices, names)
 		devices_future.add_done_callback(
-			self.future_callback(self.refresh_v4l2_info)
+			self.ui.future_callback(self.refresh_v4l2_info)
 		)
 		
 	
@@ -130,7 +116,7 @@ class MainHandler(BaseHandler):
 		
 		future = self.ui.executor.submit(thumbs.create_all)
 		future.add_done_callback(
-			self.future_callback(self.ui.show_x11_thumbs)
+			self.ui.future_callback(self.ui.show_x11_thumbs)
 		)
 		
 	
@@ -144,10 +130,10 @@ class MainHandler(BaseHandler):
 		
 		version_future = self.ui.executor.submit(ffmpeg.get_version)
 		version_future.add_done_callback(
-			self.future_callback(self.ui.show_ffmpeg_installed)
+			self.ui.future_callback(self.ui.show_ffmpeg_installed)
 		)
 		version_future.add_done_callback(
-			self.future_callback(self.ui.show_ffmpeg_version)
+			self.ui.future_callback(self.ui.show_ffmpeg_version)
 		)
 		
 	
