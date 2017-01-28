@@ -377,12 +377,19 @@ class DeviceUI(object):
 		width_widget.set_text(str(width))
 		height_widget.set_text(str(height))
 		
-	def update_output_command(self):
+	
+	def get_process_command(self):
 		"""
-			Update the display of the ffmpeg command to use
+			Provide ffmpeg command based on what the UI displays
+			
+			The command is returned as a list of string tokens,
+			suitable for passing to subprocess.Popen, or ' '.join().
+			
+			If a command cannot be compiled due to missing or invalid
+			inputs, the return value will be an empty list.
 		"""
-		# We fetch values directly from what the UI displays,
-		# so that the source of all values are visible to the user.
+		# We take as much as possible from the UI, so that the
+		# actual values we use are visible to the user.
 		try:
 			cmd = ffmpeg.compile_command(
 				source_screen=self.get_widget('source_screen').get_text(),
@@ -397,6 +404,13 @@ class DeviceUI(object):
 			)
 		except ValueError:
 			cmd = []
+		return cmd
+		
+	def update_process_command(self):
+		"""
+			Update the display of the ffmpeg command to use
+		"""
+		cmd = self.get_process_command()
 		self.get_widget('process_command').set_text(' '.join(cmd))
 		
 	def update_output_state(self):
