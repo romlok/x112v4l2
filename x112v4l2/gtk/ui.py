@@ -14,13 +14,10 @@ from x112v4l2.gtk import signals
 from x112v4l2.gtk import utils
 
 
-class MainUI(object):
+class BaseUI(object):
 	"""
-		General wrapper around all the main window functionality
+		Core functionality for all UI classes.
 	"""
-	# UI definition files
-	MAIN_GLADE = os.path.join(os.path.dirname(__file__), 'main.glade')
-	
 	# Random constants
 	STATE_RELOADING = 'reloading'
 	STATE_RELOADING_LABEL = '???'
@@ -32,6 +29,28 @@ class MainUI(object):
 	ICON_NO = 'gtk-no'
 	
 	
+	def __init__(self, executor=None, **kwargs):
+		"""
+			Fire up a new UI
+			
+			The `executor` should be a futures Executor class.
+			If none is supplied, a new ProcessPoolExecutor is created.
+		"""
+		if executor is None:
+			executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
+		self.executor = executor
+		
+		super().__init__(**kwargs)
+		
+	
+class MainUI(BaseUI):
+	"""
+		General wrapper around all the main window functionality
+	"""
+	# UI definition files
+	MAIN_GLADE = os.path.join(os.path.dirname(__file__), 'main.glade')
+	
+	
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 		
@@ -39,8 +58,6 @@ class MainUI(object):
 		self.deviceuis = []
 		# The most recent X11 window information
 		self.x11_windows = []
-		
-		self.executor = futures.ProcessPoolExecutor(max_workers=self.MAX_WORKERS)
 		
 		self.load_main_window()
 		
@@ -100,6 +117,7 @@ class MainUI(object):
 			Adds a device to the main UI
 		"""
 		device = DeviceUI(
+			executor=self.executor,
 			path=path,
 			label=label,
 			windows=self.x11_windows,
@@ -241,7 +259,7 @@ class MainUI(object):
 			widget.set_label(str(version))
 		
 	
-class DeviceUI(object):
+class DeviceUI(BaseUI):
 	"""
 		Wrapper around device-specific functionality
 	"""
