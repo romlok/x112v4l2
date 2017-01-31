@@ -543,6 +543,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
+                                <property name="editable">False</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -596,6 +597,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="start_process" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -609,6 +611,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="stop_process" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -638,41 +641,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                             <property name="can_focus">True</property>
                             <child>
                               <object class="GtkScrolledWindow">
-                                <property name="width_request">400</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="shadow_type">in</property>
-                                <property name="overlay_scrolling">False</property>
-                                <property name="propagate_natural_height">True</property>
-                                <child>
-                                  <object class="GtkTextView" id="process_stdout">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="margin_bottom">4</property>
-                                    <property name="editable">False</property>
-                                    <property name="wrap_mode">char</property>
-                                    <property name="cursor_visible">False</property>
-                                    <property name="buffer">textbuffer1</property>
-                                    <property name="monospace">True</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child type="tab">
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">STDOUT</property>
-                              </object>
-                              <packing>
-                                <property name="tab_fill">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow">
-                                <property name="width_request">400</property>
+                                <property name="width_request">600</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
@@ -693,6 +662,39 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                   </object>
                                 </child>
                               </object>
+                            </child>
+                            <child type="tab">
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">STDERR</property>
+                              </object>
+                              <packing>
+                                <property name="tab_fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="width_request">400</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="shadow_type">in</property>
+                                <property name="overlay_scrolling">False</property>
+                                <property name="propagate_natural_height">True</property>
+                                <child>
+                                  <object class="GtkTextView" id="process_stdout">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_bottom">4</property>
+                                    <property name="editable">False</property>
+                                    <property name="wrap_mode">char</property>
+                                    <property name="cursor_visible">False</property>
+                                    <property name="monospace">True</property>
+                                  </object>
+                                </child>
+                              </object>
                               <packing>
                                 <property name="position">1</property>
                               </packing>
@@ -701,7 +703,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">STDERR</property>
+                                <property name="label" translatable="yes">STDOUT</property>
                               </object>
                               <packing>
                                 <property name="position">1</property>

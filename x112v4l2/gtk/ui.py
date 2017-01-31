@@ -2,11 +2,14 @@
 	Functionality for handling the UI elements
 """
 import os
+import subprocess
+import fcntl
 from concurrent import futures
 
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import GLib
 from gi.repository import GObject
 
 from x112v4l2 import thumbs
@@ -82,6 +85,8 @@ class MainUI(BaseUI):
 		Gtk.main()
 		
 	def stop(self):
+		for device in self.deviceuis:
+			device.stop_process()
 		self.executor.shutdown(wait=True)
 		return Gtk.main_quit()
 		
@@ -296,6 +301,8 @@ class DeviceUI(BaseUI):
 		if windows:
 			self.show_thumbs(windows=windows)
 		
+		self.process = None
+		
 	
 	def load_config_widget(self):
 		"""
@@ -434,6 +441,7 @@ class DeviceUI(BaseUI):
 				output_width=self.get_widget('output_width').get_text(),
 				output_height=self.get_widget('output_height').get_text(),
 				fps=self.get_widget('output_fps').get_text(),
+				loglevel='info',
 			)
 		except ValueError:
 			cmd = []
@@ -446,6 +454,107 @@ class DeviceUI(BaseUI):
 		cmd = self.get_process_command()
 		self.get_widget('process_command').set_text(' '.join(cmd))
 		
-	def update_output_state(self):
-		pass
+	def show_process_state(self):
+		if self.process is None:
+			state = 'Stopped'
+		elif self.process.poll() is not None:
+			state = 'Stopped ({})'.format(self.process.returncode)
+		else:
+			state = 'Running (pid {})'.format(self.process.pid)
+		
+		self.get_widget('process_state').set_label(state)
+		
+	def clear_process_stdout(self):
+		"""
+			Clear the display of the process STDOUT
+		"""
+		stdout_widget = self.get_widget('process_stdout')
+		stdout_widget.get_buffer().set_text('')
+		
+	def clear_process_stderr(self):
+		"""
+			Clear the display of the process STDERR
+		"""
+		stderr_widget = self.get_widget('process_stderr')
+		stderr_widget.get_buffer().set_text('')
+		
+	def append_process_stdout(self, output):
+		"""
+			Append some text to the process STDOUT display
+		"""
+		stdout_buffer = self.get_widget('process_stdout').get_buffer()
+		stdout_buffer.insert(stdout_buffer.get_end_iter(), output)
+		
+	def append_process_stderr(self, output):
+		"""
+			Append some text to the process STDERR display
+		"""
+		stderr_buffer = self.get_widget('process_stderr').get_buffer()
+		stderr_buffer.insert(stderr_buffer.get_end_iter(), output)
+		
+	def start_process(self):
+		"""
+			Start the ffmpeg subprocess
+		"""
+		if self.process and self.process.poll() is None:
+			raise RuntimeError('Refusing to start process when already running')
+		
+		cmd = self.get_process_command()
+		self.process = subprocess.Popen(
+			cmd,
+			stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE,
+			stdin=subprocess.DEVNULL,
+		)
+		# Make the pipes non-blocking
+		flags = fcntl.fcntl(self.process.stdout, fcntl.F_GETFL)
+		fcntl.fcntl(self.process.stdout, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+		flags = fcntl.fcntl(self.process.stderr, fcntl.F_GETFL)
+		fcntl.fcntl(self.process.stderr, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+		# Clear any output from previous incarnations
+		self.clear_process_stdout()
+		self.clear_process_stderr()
+		
+		# Update the UI when there's output from the process
+		def output_callback(fd, condition, pipe, func):
+			""" Read from pipe, and pass to the given func """
+			output = pipe.read()
+			if not output:
+				return False
+			func(output.decode('utf-8'))
+			return condition != GLib.IO_HUP
+			
+		stdout_read_cb = GLib.io_add_watch(
+			self.process.stdout,
+			GLib.PRIORITY_DEFAULT,
+			GLib.IO_IN | GLib.IO_HUP,
+			output_callback,
+			self.process.stdout,
+			self.append_process_stdout,
+		)
+		GLib.io_add_watch(
+			self.process.stderr,
+			GLib.PRIORITY_DEFAULT,
+			GLib.IO_IN | GLib.IO_HUP,
+			output_callback,
+			self.process.stderr,
+			self.append_process_stderr,
+		)
+		
+	def stop_process(self):
+		"""
+			Stop any ffmpeg subprocess
+			
+			NB: This function blocks until the subprocess is finished!
+		"""
+		if not self.process or self.process.poll() is not None:
+			# Already stopped
+			self.show_process_state()
+			return
+		
+		self.process.terminate()
+		## TODO: Handle this in an async manner
+		self.process.wait()
+		self.show_process_state()
+		
 	

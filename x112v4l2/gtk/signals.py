@@ -169,7 +169,20 @@ class DeviceHandler(BaseHandler):
 			Update the state of the output config controls
 		"""
 		self.ui.update_output_size()
-		self.ui.update_output_state()
-		self.ui.update_output_command()
+		self.ui.update_process_command()
+		self.ui.show_process_state()
+		
+	
+	def stop_process(self, *args):
+		"""
+			Stop any current ffmpeg subprocess for this device
+		"""
+		self.ui.stop_process()
+		
+	def start_process(self, *args):
+		"""
+			Attempt to start an ffmpeg subprocess
+		"""
+		self.ui.start_process()
 		
 	
