@@ -36,6 +36,7 @@ def compile_command(
 	fps=0,
 	scale=True,
 	pad=True,
+	loglevel='error',
 ):
 	"""
 		Build an ffmpeg command suitable for the given arguments
@@ -72,7 +73,7 @@ def compile_command(
 	
 	input_args = [
 		'ffmpeg',
-		'-loglevel', 'error',
+		'-loglevel', loglevel,
 		# Input options
 		'-f', 'x11grab',
 		# NB. High framerate for screenshots, so we're not left waiting
