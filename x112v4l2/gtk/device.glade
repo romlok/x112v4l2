@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkTextBuffer" id="textbuffer1">
+  <object class="GtkTextBuffer" id="stderr_buffer">
     <property name="text" translatable="yes">This is some text
 
 The next (non-blank) line is 80 characters long
@@ -657,7 +657,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                     <property name="editable">False</property>
                                     <property name="wrap_mode">char</property>
                                     <property name="cursor_visible">False</property>
-                                    <property name="buffer">textbuffer1</property>
+                                    <property name="buffer">stderr_buffer</property>
                                     <property name="monospace">True</property>
                                   </object>
                                 </child>
