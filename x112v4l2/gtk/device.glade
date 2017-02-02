@@ -592,12 +592,12 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                 <property name="can_focus">False</property>
                                 <property name="spacing">8</property>
                                 <child>
-                                  <object class="GtkButton" id="process_start">
-                                    <property name="label" translatable="yes">Start</property>
+                                  <object class="GtkButton" id="process_restart">
+                                    <property name="label" translatable="yes">(Re)start</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <signal name="clicked" handler="start_process" swapped="no"/>
+                                    <signal name="clicked" handler="restart_process" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>

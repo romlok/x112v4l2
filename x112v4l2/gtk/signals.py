@@ -185,4 +185,12 @@ class DeviceHandler(BaseHandler):
 		"""
 		self.ui.start_process()
 		
+	def restart_process(self, *args):
+		"""
+			Stop-start the ffmpeg subprocess
+		"""
+		# We can do it this way because stop_process blocks :/
+		self.stop_process(*args)
+		self.start_process(*args)
+		
 	
