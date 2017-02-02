@@ -505,7 +505,12 @@ class DeviceUI(BaseUI):
 			Scroll the display of the given text_widget
 		"""
 		adj = text_widget.get_parent().get_vadjustment()
-		adj.set_value(adj.get_upper() - adj.get_page_size())
+		# Only scroll if we're at/near the bottom
+		# NB. Each line appears to be 15 value-units high
+		# (even if it wraps over multiple lines)
+		bottom = adj.get_value() + adj.get_page_size()
+		if bottom + 20 > adj.get_upper():
+			adj.set_value(adj.get_upper() - adj.get_page_size())
 		
 	def start_process(self):
 		"""
