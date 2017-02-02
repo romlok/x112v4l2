@@ -86,7 +86,7 @@ class MainUI(BaseUI):
 		
 	def stop(self):
 		for device in self.deviceuis:
-			device.stop_process()
+			device.stop()
 		self.executor.shutdown(wait=True)
 		return Gtk.main_quit()
 		
@@ -127,6 +127,8 @@ class MainUI(BaseUI):
 		"""
 			Removes all device configuration tabs from the main UI
 		"""
+		for device in self.deviceuis:
+			device.stop()
 		self.deviceuis = []
 		self.device_list.set_current_page(0)
 		for idx in range(0, self.device_list.get_n_pages() - 1):
@@ -302,6 +304,12 @@ class DeviceUI(BaseUI):
 			self.show_thumbs(windows=windows)
 		
 		self.process = None
+		
+	def stop(self):
+		"""
+			Stop all activity for this device
+		"""
+		self.stop_process()
 		
 	
 	def load_config_widget(self):
