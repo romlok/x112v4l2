@@ -549,6 +549,9 @@ class DeviceUI(BaseUI):
 			self.append_process_stderr,
 		)
 		
+		# Update the UI
+		self.show_process_state()
+		
 	def stop_process(self):
 		"""
 			Stop any ffmpeg subprocess
