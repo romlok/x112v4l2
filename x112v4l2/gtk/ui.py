@@ -500,6 +500,13 @@ class DeviceUI(BaseUI):
 		stderr_buffer = self.get_widget('process_stderr').get_buffer()
 		stderr_buffer.insert(stderr_buffer.get_end_iter(), output)
 		
+	def scroll_process_output(self, text_widget):
+		"""
+			Scroll the display of the given text_widget
+		"""
+		adj = text_widget.get_parent().get_vadjustment()
+		adj.set_value(adj.get_upper() - adj.get_page_size())
+		
 	def start_process(self):
 		"""
 			Start the ffmpeg subprocess

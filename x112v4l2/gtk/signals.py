@@ -172,6 +172,12 @@ class DeviceHandler(BaseHandler):
 		self.ui.update_process_command()
 		self.ui.show_process_state()
 		
+	def scroll_process_output(self, widget, *args):
+		"""
+			For when an output text widget needs to scroll
+		"""
+		self.ui.scroll_process_output(widget)
+		
 	
 	def stop_process(self, *args):
 		"""

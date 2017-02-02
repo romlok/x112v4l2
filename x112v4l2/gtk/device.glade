@@ -11,6 +11,9 @@ The next (non-blank) line is 80 characters long
 
 This is a line of text which has more than 80 characters, so that we can test what happens when things get looooong.</property>
   </object>
+  <object class="GtkTextBuffer" id="stdout_buffer">
+    <property name="text" translatable="yes">This space intentionally left blank</property>
+  </object>
   <object class="GtkPaned" id="device_config">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
@@ -659,6 +662,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                     <property name="cursor_visible">False</property>
                                     <property name="buffer">stderr_buffer</property>
                                     <property name="monospace">True</property>
+                                    <signal name="size-allocate" handler="scroll_process_output" swapped="no"/>
                                   </object>
                                 </child>
                               </object>
@@ -691,7 +695,9 @@ This is a line of text which has more than 80 characters, so that we can test wh
                                     <property name="editable">False</property>
                                     <property name="wrap_mode">char</property>
                                     <property name="cursor_visible">False</property>
+                                    <property name="buffer">stdout_buffer</property>
                                     <property name="monospace">True</property>
+                                    <signal name="size-allocate" handler="scroll_process_output" swapped="no"/>
                                   </object>
                                 </child>
                               </object>
