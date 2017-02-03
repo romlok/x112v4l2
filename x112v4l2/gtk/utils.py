@@ -18,6 +18,8 @@ def find_child_by_id(root, name):
 		children = next_level
 		next_level = []
 		for child in children:
+			if child is None:
+				continue
 			if Gtk.Buildable.get_name(child) == name:
 				# Bingo
 				return child

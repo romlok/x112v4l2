@@ -320,6 +320,8 @@ class DeviceUI(BaseUI):
 		builder.add_from_file(self.DEVICE_GLADE)
 		builder.connect_signals(signals.DeviceHandler(ui=self))
 		config = builder.get_object('device_config')
+		if config is None:
+			raise KeyError('No device_config in {}'.format(self.DEVICE_GLADE))
 		return config
 		
 	def load_thumb_widget(self):
