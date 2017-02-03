@@ -54,11 +54,8 @@ def create_all(parallel=4):
 			procs[win_id] = ffmpeg.capture_window(
 				window=window,
 				filename=filename,
-				scale={
-					'w': THUMB_WIDTH,
-					'h': THUMB_HEIGHT,
-					'force_original_aspect_ratio': 'decrease',
-				},
+				max_width=THUMB_WIDTH,
+				max_height=THUMB_HEIGHT,
 			)
 			thumbs[win_id] = filename
 		
