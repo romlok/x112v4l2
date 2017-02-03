@@ -1,6 +1,7 @@
 """
 	Functionality for handling the UI elements
 """
+import math
 import os
 import subprocess
 import fcntl
@@ -404,6 +405,7 @@ class DeviceUI(BaseUI):
 		width_widget = self.get_widget('output_width')
 		height_widget = self.get_widget('output_height')
 		
+		
 		# Work out what values of width and height to use
 		if width is not None and height is not None:
 			pass
@@ -422,6 +424,12 @@ class DeviceUI(BaseUI):
 				height = height_widget.get_text()
 			width = int(width) if width.isdigit() else 0
 			height = int(height) if height.isdigit() else 0
+		
+		# Check if we need to even-ise
+		even_widget = self.get_widget('output_force_even')
+		if even_widget.get_active():
+			width = math.ceil(width / 2) * 2
+			height = math.ceil(height / 2) * 2
 		
 		# Now we can update the widgets
 		width_widget.set_text(str(width))
@@ -451,6 +459,7 @@ class DeviceUI(BaseUI):
 				output_width=self.get_widget('output_width').get_text(),
 				output_height=self.get_widget('output_height').get_text(),
 				fps=self.get_widget('output_fps').get_text(),
+				maintain_aspect=self.get_widget('output_maintain_aspect').get_active(),
 				loglevel='info',
 			)
 		except ValueError:

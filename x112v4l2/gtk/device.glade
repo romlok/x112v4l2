@@ -396,6 +396,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                 <property name="tooltip_text" translatable="yes">Playback may be janky if either of the X or Y dimensions of a video is not divisible by 2</property>
                 <property name="halign">start</property>
                 <property name="active">True</property>
+                <signal name="state-set" handler="refresh_output_config" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -434,6 +435,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
 Off: Stretch the source stream to match the output dimensions</property>
                 <property name="halign">start</property>
                 <property name="active">True</property>
+                <signal name="state-set" handler="refresh_output_config" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
