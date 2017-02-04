@@ -142,7 +142,7 @@ class DeviceHandler(BaseHandler):
 	"""
 		Handler for events triggered from a device tab
 	"""
-	def update_source_config(self, list_box, item, *args):
+	def update_source_config(self, container, item, *args):
 		"""
 			Update the source config based on thumbnail selection
 		"""

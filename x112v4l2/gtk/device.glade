@@ -24,6 +24,10 @@ This is a line of text which has more than 80 characters, so that we can test wh
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Source</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+          <attribute name="scale" value="1.5"/>
+        </attributes>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -35,7 +39,8 @@ This is a line of text which has more than 80 characters, so that we can test wh
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="homogeneous">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">4</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="height_request">150</property>
@@ -49,15 +54,14 @@ This is a line of text which has more than 80 characters, so that we can test wh
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkListBox" id="thumb_list">
+                  <object class="GtkFlowBox" id="thumb_list">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <signal name="row-activated" handler="update_source_config" swapped="no"/>
-                    <signal name="row-selected" handler="update_source_config" swapped="no"/>
+                    <property name="homogeneous">True</property>
+                    <property name="min_children_per_line">4</property>
+                    <signal name="child-activated" handler="update_source_config" swapped="no"/>
                     <child>
-                      <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
-                        <property name="height_request">80</property>
+                      <object class="GtkFlowBoxChild">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <child>
@@ -96,9 +100,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
-                        <property name="height_request">80</property>
+                      <object class="GtkFlowBoxChild">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <child>
@@ -111,9 +113,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
-                        <property name="height_request">80</property>
+                      <object class="GtkFlowBoxChild">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <child>
@@ -137,82 +137,22 @@ This is a line of text which has more than 80 characters, so that we can test wh
           </packing>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="row_spacing">4</property>
-            <property name="column_spacing">8</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Screen</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Position</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Size</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="source_screen">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="halign">start</property>
-                <property name="max_length">6</property>
-                <property name="width_chars">6</property>
-                <property name="xalign">1</property>
-                <property name="placeholder_text" translatable="yes">:0.0</property>
-                <property name="input_purpose">number</property>
-                <signal name="changed" handler="refresh_output_config" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
+            <property name="spacing">17</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">8</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEntry" id="source_x">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="max_length">6</property>
-                    <property name="width_chars">6</property>
-                    <property name="xalign">1</property>
-                    <property name="placeholder_text" translatable="yes">x</property>
-                    <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Screen</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -221,10 +161,16 @@ This is a line of text which has more than 80 characters, so that we can test wh
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkEntry" id="source_screen">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">x</property>
+                    <property name="can_focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="max_length">6</property>
+                    <property name="width_chars">6</property>
+                    <property name="xalign">1</property>
+                    <property name="placeholder_text" translatable="yes">:0.0</property>
+                    <property name="input_purpose">number</property>
+                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -232,44 +178,35 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkEntry" id="source_y">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="max_length">6</property>
-                    <property name="width_chars">6</property>
-                    <property name="xalign">1</property>
-                    <property name="placeholder_text" translatable="yes">y</property>
-                    <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">8</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEntry" id="source_width">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="max_length">6</property>
-                    <property name="width_chars">6</property>
-                    <property name="xalign">1</property>
-                    <property name="placeholder_text" translatable="yes">width</property>
-                    <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Position</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -278,10 +215,56 @@ This is a line of text which has more than 80 characters, so that we can test wh
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">x</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkEntry" id="source_x">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="max_length">6</property>
+                        <property name="width_chars">6</property>
+                        <property name="xalign">1</property>
+                        <property name="placeholder_text" translatable="yes">x</property>
+                        <property name="input_purpose">number</property>
+                        <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">x</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="source_y">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="max_length">6</property>
+                        <property name="width_chars">6</property>
+                        <property name="xalign">1</property>
+                        <property name="placeholder_text" translatable="yes">y</property>
+                        <property name="input_purpose">number</property>
+                        <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -289,27 +272,105 @@ This is a line of text which has more than 80 characters, so that we can test wh
                     <property name="position">1</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEntry" id="source_height">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="max_length">6</property>
-                    <property name="width_chars">6</property>
-                    <property name="xalign">1</property>
-                    <property name="placeholder_text" translatable="yes">height</property>
-                    <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Size</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkEntry" id="source_width">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="max_length">6</property>
+                        <property name="width_chars">6</property>
+                        <property name="xalign">1</property>
+                        <property name="placeholder_text" translatable="yes">width</property>
+                        <property name="input_purpose">number</property>
+                        <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">x</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="source_height">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="max_length">6</property>
+                        <property name="width_chars">6</property>
+                        <property name="xalign">1</property>
+                        <property name="placeholder_text" translatable="yes">height</property>
+                        <property name="input_purpose">number</property>
+                        <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -342,6 +403,10 @@ This is a line of text which has more than 80 characters, so that we can test wh
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Output</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+          <attribute name="scale" value="1.5"/>
+        </attributes>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -587,7 +652,11 @@ Off: Stretch the source stream to match the output dimensions</property>
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">FFmpeg process</property>
+        <property name="label" translatable="yes">Process</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+          <attribute name="scale" value="1.5"/>
+        </attributes>
       </object>
       <packing>
         <property name="expand">False</property>

@@ -10,8 +10,8 @@ from x112v4l2 import x11
 from x112v4l2 import ffmpeg
 
 
-THUMB_WIDTH = 240
-THUMB_HEIGHT = 135
+THUMB_WIDTH = 160
+THUMB_HEIGHT = 90
 CACHE_PATH = os.path.join(tempfile.gettempdir(), 'x112v4l2', 'thumbs')
 
 
