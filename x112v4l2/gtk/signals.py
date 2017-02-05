@@ -111,6 +111,8 @@ class MainHandler(BaseHandler):
 		"""
 			(Re-)Generate thumbnails of all X11 windows
 		"""
+		self.refresh_x11_info()
+		
 		self.ui.show_x11_thumb_path(thumbs.CACHE_PATH)
 		self.ui.show_x11_thumbs(self.ui.STATE_RELOADING)
 		
