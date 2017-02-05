@@ -34,6 +34,7 @@ def compile_command(
 	output_width=None,
 	output_height=None,
 	fps=0,
+	scale=True,
 	maintain_aspect=True,
 	loglevel='error',
 ):
@@ -49,8 +50,13 @@ def compile_command(
 		To take a single screenshot of the given source, provide an
 		`fps` of 0.
 		
-		If maintain_aspect is True, the source will be scaled to fit
-		the output resolution, with pillar/letterbox padding added.
+		If `scale` is True, the source will be scaled to fit the the
+		output resolution.
+		Otherwise, the video will be centred, with padding added to
+		make up the space.
+		
+		When scaling, if `maintain_aspect` is True, the source will
+		have pillar/letterbox padding added.
 		Otherwise, the source will be stretched to fit the specified
 		output resolution.
 	"""
@@ -86,14 +92,14 @@ def compile_command(
 	# Filters (eg. scaling, letterboxing, etc.)
 	filter_args = []
 	if output_width != source_width or output_height != source_height:
-		if not maintain_aspect:
+		if scale and not maintain_aspect:
 			# Stretch to fit
 			filter_args.append(
 				'scale=width={w}:height={h}'.format(w=output_width, h=output_height)
 			)
 			
 		else:
-			if output_width != source_width and output_height != source_height:
+			if scale and output_width != source_width and output_height != source_height:
 				# Scale the video
 				filter_args.append(
 					'scale=width={w}:height={h}:force_original_aspect_ratio=decrease'.format(
@@ -103,7 +109,7 @@ def compile_command(
 				)
 			source_aspect = source_width / source_height
 			output_aspect = output_width / output_height
-			if source_aspect != output_aspect:
+			if not scale or source_aspect != output_aspect:
 				# Apply padding
 				filter_args.append(
 					'pad=width={w}:height={h}:x=(ow-iw)/2:y=(oh-ih)/2'.format(

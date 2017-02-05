@@ -485,8 +485,10 @@ class DeviceUI(BaseUI):
 		
 		# Ignore UI controls from unchosen sizing methods
 		if self.get_output_sizing_method() == self.OUTPUT_SIZE_SOURCE:
+			scale=False
 			maintain_aspect = True
 		else:
+			scale=True
 			maintain_aspect = self.get_widget('output_maintain_aspect').get_active()
 		
 		try:
@@ -500,6 +502,7 @@ class DeviceUI(BaseUI):
 				output_width=output_width,
 				output_height=output_height,
 				fps=self.get_widget('output_fps').get_text(),
+				scale=scale,
 				maintain_aspect=maintain_aspect,
 				loglevel='info',
 			)
