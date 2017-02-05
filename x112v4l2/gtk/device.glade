@@ -419,92 +419,164 @@ This is a line of text which has more than 80 characters, so that we can test wh
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>
-        <property name="homogeneous">True</property>
+        <property name="spacing">16</property>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="row_spacing">4</property>
-            <property name="column_spacing">8</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">4</property>
             <child>
-              <object class="GtkSwitch" id="output_use_source_size">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="halign">start</property>
-                <property name="active">True</property>
-                <signal name="state-set" handler="refresh_output_config" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
+              <object class="GtkStackSwitcher">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Match source size</property>
+                <property name="halign">center</property>
+                <property name="stack">output_size_stack</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSwitch" id="output_force_even">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Playback may be janky if either of the X or Y dimensions of a video is not divisible by 2</property>
-                <property name="halign">start</property>
-                <property name="active">True</property>
-                <signal name="state-set" handler="refresh_output_config" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
+              <object class="GtkStack" id="output_size_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Force even dimensions</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Maintain aspect ratio</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSwitch" id="output_maintain_aspect">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">On: Apply letterbox/pillarbox padding to output.
+                <property name="margin_top">8</property>
+                <signal name="notify::visible-child" handler="refresh_output_config" swapped="no"/>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Force even dimensions</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSwitch" id="output_force_even">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Playback may be janky if either of the X or Y dimensions of a video is not divisible by 2</property>
+                        <property name="halign">end</property>
+                        <property name="active">True</property>
+                        <signal name="state-set" handler="refresh_output_config" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">output_match_source_size</property>
+                    <property name="title" translatable="yes">Match source size</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">4</property>
+                    <child>
+                      <object class="GtkComboBoxText" id="output_size_select">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="active">2</property>
+                        <property name="has_entry">True</property>
+                        <items>
+                          <item translatable="yes">-- 16:9 --</item>
+                          <item translatable="yes">3840x2160</item>
+                          <item translatable="yes">1920x1080</item>
+                          <item translatable="yes">1600x900</item>
+                          <item translatable="yes">1280x720</item>
+                          <item translatable="yes">-- 4:3 --</item>
+                          <item translatable="yes">1600x1200</item>
+                          <item translatable="yes">1280x960</item>
+                          <item translatable="yes">1024x768</item>
+                          <item translatable="yes">800x600</item>
+                          <item translatable="yes">640x480</item>
+                        </items>
+                        <signal name="changed" handler="refresh_output_config" swapped="no"/>
+                        <child internal-child="entry">
+                          <object class="GtkEntry">
+                            <property name="can_focus">False</property>
+                            <property name="text" translatable="yes">1920x1080</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="homogeneous">True</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">Maintain aspect ratio</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="output_maintain_aspect">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">On: Apply letterbox/pillarbox padding to output.
 Off: Stretch the source stream to match the output dimensions</property>
-                <property name="halign">start</property>
-                <property name="active">True</property>
-                <signal name="state-set" handler="refresh_output_config" swapped="no"/>
+                            <property name="halign">end</property>
+                            <property name="active">True</property>
+                            <signal name="state-set" handler="refresh_output_config" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">output_manual_sizing</property>
+                    <property name="title" translatable="yes">Manual sizing</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -512,6 +584,17 @@ Off: Stretch the source stream to match the output dimensions</property>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -532,13 +615,13 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <child>
                   <object class="GtkEntry" id="output_width">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="editable">False</property>
                     <property name="max_length">6</property>
                     <property name="width_chars">6</property>
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">width</property>
                     <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -561,13 +644,13 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <child>
                   <object class="GtkEntry" id="output_height">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="editable">False</property>
                     <property name="max_length">6</property>
                     <property name="width_chars">6</property>
                     <property name="xalign">1</property>
                     <property name="placeholder_text" translatable="yes">height</property>
                     <property name="input_purpose">number</property>
-                    <signal name="changed" handler="refresh_output_config" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -627,7 +710,7 @@ Off: Stretch the source stream to match the output dimensions</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

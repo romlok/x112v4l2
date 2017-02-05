@@ -404,32 +404,41 @@ class DeviceUI(BaseUI):
 		"""
 		width_widget = self.get_widget('output_width')
 		height_widget = self.get_widget('output_height')
-		
+		# Where we source dimensions from depends on the UI
+		stack = self.get_widget('output_size_stack')
+		visible_stack = stack.get_visible_child_name()
 		
 		# Work out what values of width and height to use
 		if width is not None and height is not None:
 			pass
+			
 		elif geom is not None:
 			width = geom['width']
 			height = geom['height']
-		else:
-			# Check what's going on in the UI
-			from_source_widget = self.get_widget('output_use_source_size')
-			if from_source_widget.get_active():
-				width = self.get_widget('source_width').get_text()
-				height = self.get_widget('source_height').get_text()
+			
+		elif visible_stack == 'output_manual_sizing':
+			# The size is entered in a combobox as "<width>x<height>"
+			parts = self.get_widget('output_size_select').get_active_text().split('x')
+			if len(parts) < 2:
+				width = 0
+				height = 0
 			else:
-				# Just keep whatever's in the current widgets
-				width = width_widget.get_text()
-				height = height_widget.get_text()
+				width, height = parts[:2]
+				width = int(width) if width.isdigit() else 0
+				height = int(height) if height.isdigit() else 0
+			
+		else:
+			# Use the source's dimensions
+			width = self.get_widget('source_width').get_text()
+			height = self.get_widget('source_height').get_text()
 			width = int(width) if width.isdigit() else 0
 			height = int(height) if height.isdigit() else 0
 		
-		# Check if we need to even-ise
-		even_widget = self.get_widget('output_force_even')
-		if even_widget.get_active():
-			width = math.ceil(width / 2) * 2
-			height = math.ceil(height / 2) * 2
+			# Check if we need to even-ise
+			even_widget = self.get_widget('output_force_even')
+			if even_widget.get_active():
+				width = math.ceil(width / 2) * 2
+				height = math.ceil(height / 2) * 2
 		
 		# Now we can update the widgets
 		width_widget.set_text(str(width))
