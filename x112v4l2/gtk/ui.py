@@ -289,6 +289,9 @@ class DeviceUI(BaseUI):
 	DEVICE_GLADE = os.path.join(os.path.dirname(__file__), 'device.glade')
 	THUMB_GLADE = os.path.join(os.path.dirname(__file__), 'device-thumb.glade')
 	
+	OUTPUT_SIZE_MANUAL = 'output_manual_sizing'
+	OUTPUT_SIZE_SOURCE = 'output_match_source_size'
+	
 	
 	def __init__(self, path, label, windows=None, **kwargs):
 		"""
@@ -393,6 +396,23 @@ class DeviceUI(BaseUI):
 		self.get_widget('source_height').set_text(str(geom['height']))
 		
 	
+	def get_output_sizing_method(self):
+		"""
+			The method used to select the output size
+			
+			Can be one of:
+				DeviceUI.OUTPUT_SIZE_MANUAL
+				DeviceUI.OUTPUT_SIZE_SOURCE
+		"""
+		stack = self.get_widget('output_size_stack')
+		visible_stack = stack.get_visible_child_name()
+		for val in [self.OUTPUT_SIZE_MANUAL, self.OUTPUT_SIZE_SOURCE]:
+			if visible_stack == val:
+				return val
+		
+		# Uh-oh
+		raise KeyError('No output sizing method could be determined!')
+		
 	def update_output_size(self, geom=None, width=None, height=None):
 		"""
 			Update output resolution
@@ -416,7 +436,7 @@ class DeviceUI(BaseUI):
 			width = geom['width']
 			height = geom['height']
 			
-		elif visible_stack == 'output_manual_sizing':
+		elif self.get_output_sizing_method() == self.OUTPUT_SIZE_MANUAL:
 			# The size is entered in a combobox as "<width>x<height>"
 			parts = self.get_widget('output_size_select').get_active_text().split('x')
 			if len(parts) < 2:
@@ -457,6 +477,18 @@ class DeviceUI(BaseUI):
 		"""
 		# We take as much as possible from the UI, so that the
 		# actual values we use are visible to the user.
+		output_width = self.get_widget('output_width').get_text()
+		output_height = self.get_widget('output_height').get_text()
+		invalids = [None, '', '0']
+		if output_width in invalids or output_height in invalids:
+			return []
+		
+		# Ignore UI controls from unchosen sizing methods
+		if self.get_output_sizing_method() == self.OUTPUT_SIZE_SOURCE:
+			maintain_aspect = True
+		else:
+			maintain_aspect = self.get_widget('output_maintain_aspect').get_active()
+		
 		try:
 			cmd = ffmpeg.compile_command(
 				source_screen=self.get_widget('source_screen').get_text(),
@@ -465,10 +497,10 @@ class DeviceUI(BaseUI):
 				source_width=self.get_widget('source_width').get_text(),
 				source_height=self.get_widget('source_height').get_text(),
 				output_filename=self.path,
-				output_width=self.get_widget('output_width').get_text(),
-				output_height=self.get_widget('output_height').get_text(),
+				output_width=output_width,
+				output_height=output_height,
 				fps=self.get_widget('output_fps').get_text(),
-				maintain_aspect=self.get_widget('output_maintain_aspect').get_active(),
+				maintain_aspect=maintain_aspect,
 				loglevel='info',
 			)
 		except ValueError:
