@@ -513,8 +513,8 @@ This is a line of text which has more than 80 characters, so that we can test wh
                         <signal name="changed" handler="refresh_output_config" swapped="no"/>
                         <child internal-child="entry">
                           <object class="GtkEntry">
-                            <property name="can_focus">False</property>
-                            <property name="text" translatable="yes">1920x1080</property>
+                            <property name="can_focus">True</property>
+                            <property name="max_length">16</property>
                           </object>
                         </child>
                       </object>
