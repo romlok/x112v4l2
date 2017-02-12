@@ -42,7 +42,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="regen_x11_thumbs_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

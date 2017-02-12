@@ -248,10 +248,10 @@ class MainUI(BaseUI):
 	def show_x11_thumbs(self, thumbs):
 		count_widget = self.get_widget('x11_thumb_count_indicator')
 		if thumbs == self.STATE_RELOADING:
-			# Clear all the things
+			# Set phasers to reloading
 			count_widget.set_label(self.STATE_RELOADING_LABEL)
 			for device in self.deviceuis:
-				device.clear_thumbs()
+				device.show_thumbs(self.STATE_RELOADING)
 			return
 			
 		# We're doing it live!
@@ -365,6 +365,12 @@ class DeviceUI(BaseUI):
 		"""
 			Show/update the list of window thumbnails
 		"""
+		button_widget = self.get_widget('regen_x11_thumbs_button')
+		if windows == self.main_ui.STATE_RELOADING:
+			# Disable the button until we're done
+			button_widget.set_sensitive(False)
+			return
+		
 		self.clear_thumbs()
 		for win in windows:
 			thumb = self.add_thumb(
@@ -374,6 +380,7 @@ class DeviceUI(BaseUI):
 			# Associate the thumb with the window, for later reference
 			thumb.source_window = win
 			
+		button_widget.set_sensitive(True)
 		
 	def add_thumb(self, label, image):
 		"""
