@@ -78,9 +78,10 @@ class MainUI(BaseUI):
 		# The most recent X11 window information
 		self.x11_windows = []
 		
+		self.handler = signals.MainHandler(ui=self)
 		self.load_main_window()
 		
-		
+	
 	def run(self):
 		self.main_window.show_all()
 		Gtk.main()
@@ -98,7 +99,7 @@ class MainUI(BaseUI):
 		"""
 		builder = Gtk.Builder()
 		builder.add_from_file(self.MAIN_GLADE)
-		builder.connect_signals(signals.MainHandler(ui=self))
+		builder.connect_signals(self.handler)
 		# We want the main window
 		self.main_window = builder.get_object('main')
 		# We also want the device-tab widget
@@ -143,6 +144,7 @@ class MainUI(BaseUI):
 			executor=self.executor,
 			path=path,
 			label=label,
+			main_ui=self,
 			windows=self.x11_windows,
 		)
 		
@@ -293,7 +295,7 @@ class DeviceUI(BaseUI):
 	OUTPUT_SIZE_SOURCE = 'output_match_source_size'
 	
 	
-	def __init__(self, path, label, windows=None, **kwargs):
+	def __init__(self, path, label, main_ui, windows=None, **kwargs):
 		"""
 			Create a new device UI inside the given `container`
 			
@@ -302,7 +304,10 @@ class DeviceUI(BaseUI):
 		super().__init__(**kwargs)
 		self.path = path
 		self.label = label
+		self.main_ui = main_ui
+		self.handler = signals.DeviceHandler(ui=self)
 		self.widget = self.load_config_widget()
+		
 		self.clear_thumbs()
 		if windows:
 			self.show_thumbs(windows=windows)
@@ -322,7 +327,10 @@ class DeviceUI(BaseUI):
 		"""
 		builder = Gtk.Builder()
 		builder.add_from_file(self.DEVICE_GLADE)
-		builder.connect_signals(signals.DeviceHandler(ui=self))
+		builder.connect_signals(signals.MultiHandler(
+			self.handler,
+			self.main_ui.handler,
+		))
 		config = builder.get_object('device_config')
 		if config is None:
 			raise KeyError('No device_config in {}'.format(self.DEVICE_GLADE))

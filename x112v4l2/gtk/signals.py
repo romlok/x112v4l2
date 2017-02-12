@@ -13,6 +13,37 @@ from x112v4l2 import ffmpeg
 from x112v4l2 import thumbs
 
 
+class MultiHandler(object):
+	"""
+		A handler which wraps multiple handlers
+		
+		This is necessary because Gtk.Builder.connect_signals()
+		only works once - any further calls to it get ignored.
+		
+		See: http://stackoverflow.com/questions/4637792/
+	"""
+	def __init__(self, *args):
+		"""
+			Configure the handler with the given handler `args`
+			
+			The handlers objects will be checked for handler methods
+			in the order that they appear in the argument list.
+		"""
+		self.handlers = args
+		
+	def __getattr__(self, name):
+		for handler in self.handlers:
+			func = getattr(handler, name, None)
+			if func:
+				return func
+			
+		else:
+			raise AttributeError('No {name} handler found in {handlers}'.format(
+				name=name,
+				handlers=repr(self.handlers),
+			))
+		
+
 class BaseHandler(object):
 	"""
 		Base class for common handler-object functionality
