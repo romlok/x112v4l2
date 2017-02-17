@@ -5,6 +5,14 @@ X112V4L2
 
 X112v4l2 is a Linux glue UI for configuring FFmmpeg to stream regions of an X11 desktop session to one or more virtual webcams.
 
+Requirements
+------------
+
+* Python 3
+* Python3 GObject
+* GTK+ >=3.12
+* v4l2-loopback
+* ffmpeg
 
 Installation
 ------------

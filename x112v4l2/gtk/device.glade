@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkTextBuffer" id="stderr_buffer">
     <property name="text" translatable="yes">This is some text
 
@@ -83,7 +83,6 @@ This is a line of text which has more than 80 characters, so that we can test wh
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">never</property>
-            <property name="overlay_scrolling">False</property>
             <property name="propagate_natural_width">True</property>
             <child>
               <object class="GtkViewport">
@@ -507,7 +506,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
                         <property name="tooltip_text" translatable="yes">Playback may be janky if either of the X or Y dimensions of a video is not divisible by 2</property>
                         <property name="halign">end</property>
                         <property name="active">True</property>
-                        <signal name="state-set" handler="refresh_output_config" swapped="no"/>
+                        <signal name="notify::active" handler="refresh_output_config" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -586,7 +585,7 @@ This is a line of text which has more than 80 characters, so that we can test wh
 Off: Stretch the source stream to match the output dimensions</property>
                             <property name="halign">end</property>
                             <property name="active">True</property>
-                            <signal name="state-set" handler="refresh_output_config" swapped="no"/>
+                            <signal name="notify::active" handler="refresh_output_config" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -908,7 +907,6 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
-                <property name="overlay_scrolling">False</property>
                 <property name="propagate_natural_height">True</property>
                 <child>
                   <object class="GtkTextView" id="process_stderr">
@@ -943,7 +941,6 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
-                <property name="overlay_scrolling">False</property>
                 <property name="propagate_natural_height">True</property>
                 <child>
                   <object class="GtkTextView" id="process_stdout">

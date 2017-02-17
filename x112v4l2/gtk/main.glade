@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.12"/>
   <object class="GtkApplicationWindow" id="main">
     <property name="width_request">650</property>
     <property name="can_focus">False</property>
@@ -220,6 +220,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">4</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
@@ -241,7 +242,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
-                            <property name="overlay_scrolling">False</property>
                             <property name="propagate_natural_width">True</property>
                             <child>
                               <object class="GtkTextView" id="v4l2_device_names">
@@ -254,8 +254,6 @@ One device name per line please. No pushing.</property>
                                 <property name="wrap_mode">word</property>
                                 <property name="left_margin">8</property>
                                 <property name="right_margin">8</property>
-                                <property name="top_margin">4</property>
-                                <property name="bottom_margin">4</property>
                               </object>
                             </child>
                           </object>
