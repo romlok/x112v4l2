@@ -5,6 +5,9 @@ X112V4L2
 
 X112v4l2 is a Linux glue UI for configuring FFmmpeg to stream regions of an X11 desktop session to one or more virtual webcams.
 
+![Status](/status.png)
+![Device config](/device.png)
+
 Requirements
 ------------
 
