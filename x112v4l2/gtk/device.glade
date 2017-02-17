@@ -83,7 +83,6 @@ This is a line of text which has more than 80 characters, so that we can test wh
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">never</property>
-            <property name="propagate_natural_width">True</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
@@ -907,7 +906,6 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
-                <property name="propagate_natural_height">True</property>
                 <child>
                   <object class="GtkTextView" id="process_stderr">
                     <property name="visible">True</property>
@@ -941,7 +939,6 @@ Off: Stretch the source stream to match the output dimensions</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
-                <property name="propagate_natural_height">True</property>
                 <child>
                   <object class="GtkTextView" id="process_stdout">
                     <property name="visible">True</property>
