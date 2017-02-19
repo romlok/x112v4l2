@@ -313,6 +313,8 @@ class DeviceUI(BaseUI):
 			self.show_thumbs(windows=windows)
 		
 		self.process = None
+		self.clear_process_stdout()
+		self.clear_process_stderr()
 		
 	def stop(self):
 		"""
