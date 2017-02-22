@@ -27,12 +27,6 @@ class BaseUI(object):
 	STATE_RELOADING = 'reloading'
 	STATE_RELOADING_LABEL = '???'
 	MAX_WORKERS = 2
-	DEFAULT_ICON = os.path.join(
-		os.path.dirname(__file__),
-		os.pardir, os.pardir,
-		'icons',
-		'x112v4l2-128.png',
-	)
 	
 	# Icons
 	ICON_RELOAD = 'gtk-refresh'
@@ -72,7 +66,6 @@ class MainUI(BaseUI):
 	"""
 		General wrapper around all the main window functionality
 	"""
-	# UI definition files
 	MAIN_GLADE = os.path.join(os.path.dirname(__file__), 'main.glade')
 	
 	
@@ -86,7 +79,6 @@ class MainUI(BaseUI):
 		
 		self.handler = signals.MainHandler(ui=self)
 		self.load_main_window()
-		self.main_window.set_default_icon_from_file(self.DEFAULT_ICON)
 		
 	
 	def run(self):
