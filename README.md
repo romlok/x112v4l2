@@ -32,4 +32,6 @@ git clone https://github.com/romlok/x112v4l2.git
 Legalities
 ----------
 
-This software is licensed under the terms of the GPLv3. See GPLv3.txt.
+Unless otherwise stated, this software is licensed under the terms of the GPLv3. See GPLv3.txt.
+
+The application icon is derived from the KDE Breeze icon set, which is licensed under the LGPLv3. See icons/COPYING-ICONS for details.
